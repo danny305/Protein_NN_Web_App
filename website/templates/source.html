@@ -1,0 +1,151 @@
+{% extends "bootstrap/base.html" %}
+
+	{% block head %}
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
+
+		<title>Rajhav's Neural Net Homepage</title>
+
+		<!-- Loading third party fonts -->
+		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+		<link href="../startup_landing/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+		<!-- Loading main css file -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../startup_landing/style.css">
+
+		<!--[if lt IE 9]>
+		<script src="../startup_landing/js/ie-support/html5.js"></script>
+		<script src="../startup_landing/js/ie-support/respond.js"></script>
+		<![endif]-->
+
+	</head>
+	{% endblock head %}
+
+
+
+
+    {% block content %}
+
+        <!--<nav class="navbar navbar-default"></nav> -->
+		<nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse">
+		  <div class="container">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="{{ url_for ('homepage') }}">Raghav's Neural Net</a>
+			</div>
+			<ul class="nav navbar-nav">
+
+                {% block nav %}
+			  <li class="active"><a href="{{ url_for('homepage') }}">Home</a></li>
+			  <li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+			  <li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+                {% endblock nav %}
+
+			</ul>
+		  </div>
+		</nav>
+
+
+
+    {% block main %}
+
+		<div class="site-content">
+			<header class="hero fix" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
+				<div class="container">
+					{% block center_content %}
+					<div class="hero-content">
+						<h1>Ellington Research Lab Presents... <br>
+							<strong>Raghav's Neural Net</strong></h1>
+					</div>
+					{% endblock center_content %}
+
+					{% block center_form %}
+                    <a class="btn btn-warning" href="{{ url_for('register') }}">
+						<strong style="color: black">Register</strong></a>
+					{% endblock center_form %}
+
+					<!-- <span class="scrolldown">Scroll down to explore <br><i class="fa fa-chevron-down"></i></span> -->
+				</div>
+			</header> <!-- hero -->
+
+
+
+				<div class="fullwidth-block" data-bg-color="#e6e6e6">
+					<div class="container">
+						<h2 class="section-title">Frequently asked questions</h2>
+						<small class="section-subtitle">Laboriosam nisi aliquid commodi dolor</small>
+
+						<div class="row">
+							<div class="col-md-4">
+								<dl>
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+								</dl>
+							</div>
+							<div class="col-md-4">
+								<dl>
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+								</dl>
+							</div>
+							<div class="col-md-4">
+								<dl>
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+								</dl>
+							</div>
+						</div> <!-- .row -->
+					</div> <!-- .container -->
+				</div> <!-- .fullwidth-block -->
+
+				<div class="fullwidth-block footer-cta" data-bg-image="images/footer-bg.jpg">
+					<div class="container">
+						<div class="hero-content">
+							<h1>Easy way to launch your startup <br><strong>Simple and powerful</strong></h1>
+						</div>
+
+						<form class="subscribe-form">
+							<input type="text" placeholder="Enter your email...">
+							<input type="submit" value="Get and acess">
+						</form>
+					</div>
+				</div>
+			</main> <!-- .main-content -->
+
+			<footer class="site-footer">
+				<div class="container">
+					<p>Copyright 2014 by Company name, Designed by Themezy. All rights reserved</p>
+
+					<div class="social-links">
+						<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+						<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+						<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+						<a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+
+		<script src="../startup_landing/js/jquery-1.11.1.min.js"></script>
+		<script src="../startup_landing/js/plugins.js"></script>
+		<script src="../startup_landing/js/app.js"></script>
+
+
+    {% endblock main %}
+
+    </body>
+
+	{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends "source.html" %}
+
+{% block nav %}
+      <li><a href="{{ url_for('homepage') }}">Home</a></li>
+      <li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+      <li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+{% endblock nav %}
+
+{% block main %}
+    <div class="container-fluid">
+        <section class="container">
+            <div class="container-page">
+                <form method="post">
+                    <div class="col-md-6">
+                        <h3 class="dark-grey">Registration</h3>
+
+                        {{ form.hidden_tag() }}
+
+                        <div class="form-group col-lg-12">
+                            {{ form.first_name.label}}<br>
+                            {{ form.first_name(size=42) }}<br>
+                            {% for error in form.first_name.errors %}
+                            <span style="color : red;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {{ form.last_name.label}}<br>
+                            {{ form.last_name(size=42) }}<br>
+                            {% for error in form.last_name.errors %}
+                            <span style="color : red;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {{ form.email.label() }}<br>
+                            {{ form.email(size=42) }}<br>
+                            {% for error in form.email.errors %}
+                            <span style="color : red;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {{ form.email.label('Repeat Email Address')}}<br>
+                            {{ form.email(size=42) }}<br>
+                            {% for error in form.email.errors %}
+                            <span style="color : red;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {{ form.organization.label('Affiliated Organization')}}<br>
+                            {{ form.organization(size=42) }}<br>
+                            {% for error in form.organization.errors %}
+                            <span style="color : red;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h3 class="dark-grey">Terms and Conditions</h3>
+                        <p>
+                            By clicking on "Register" you agree to not properly misuse the Neural Network.
+                        </p>
+                        <p>
+                            We reserve the right to deny any user access to the Protein Neural net without providing
+                            reason.
+                        </p>
+                        <p>
+                            This Protein Neural Net is still an on going research project in the Ellington Research Lab
+                            and may be temporarily offline for updates and the addition of new features.
+                        </p>
+                        <p>
+                            Please visit the FAQ for additional details.
+                        </p>
+
+                        <br>
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+
+{% endblock main %}

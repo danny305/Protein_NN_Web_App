@@ -1,0 +1,7 @@
+{% extends "source.html" %}
+
+{% block nav %}
+      <li><a href="{{ url_for('homepage') }}">Home</a></li>
+      <li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+      <li class="active"><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+{% endblock nav %}}

@@ -46,7 +46,8 @@ textarea {
   font-family: sans-serif; }
 
 body {
-  margin: 0; }
+  margin: 0;
+  padding-top: 70px; }
 
 a {
   background: transparent; }
@@ -1110,18 +1111,25 @@ form textarea {
  */
 .hero {
   text-align: center;
-  color: white; }
-  .hero .container {
-    padding-top: 100px;
-    padding-bottom: 100px; }
-  .hero .branding {
-    margin-bottom: 100px;
-    display: inline-block; }
+  color: white;}
+/*This declaration below fixed the white space between the navbar and header */
+header.hero {
+  margin-top: -20px;
+}
+
+.hero .container {
+  padding-top: 200px;
+  padding-bottom: 300px; }
+.hero .branding {
+  margin-bottom: 100px;
+  display: inline-block; }
 
 .hero-content {
   margin-bottom: 100px;
   color: white;
-  text-align: center; }
+  text-align: center;
+  /*margin-top: 100px;  */ /* This is to move the center text down on the image */
+  }
   .footer-cta .hero-content {
     margin-bottom: 50px; }
   .hero-content h1 {
@@ -1311,3 +1319,9 @@ dl dd {
       background-color: #d3492c; }
     .social-links a.pinterest {
       background-color: #ca2128; }
+
+
+/* Custom CSS for the NN Web app */
+.avoid-navbar {
+  margin-top: 40px;
+}

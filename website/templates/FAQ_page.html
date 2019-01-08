@@ -1,7 +1,215 @@
 {% extends "source.html" %}
 
 {% block nav %}
-      <li><a href="{{ url_for('homepage') }}">Home</a></li>
-      <li><a href="{{ url_for ('NN_page') }}">NN</a></li>
-      <li class="active"><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
-{% endblock nav %}}
+      <ul class="nav navbar-nav">
+				<li><a href="{{ url_for('homepage') }}">Home</a></li>
+			  	<li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+			  	<li class="active"><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('register_page') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      			<li><a href="{{ url_for('login_page') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<!--<button class="btn btn-primary navbar-nav navbar-right">Login</button>-->
+			</ul>
+{% endblock nav %}
+
+{% block main %}
+
+<div class="container">
+
+<div class="page-header">
+    <h1>FAQ <small>Frequently Asked Questions</small></h1>
+</div>
+
+<!-- Bootstrap FAQ - START -->
+<div class="container-fluid avoid-footer">
+    <br />
+
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">General questions</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Is account registration required?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    In order to utilize the Neural Network you must register and create and account.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">Can I submit a protein we crystallized in house?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    To submit your own protein crystal structure you must ensure the file format matches a ... file.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">What is the currency used for all transactions?</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    We prefer American Dollars but will accept Euros.
+                </div>
+            </div>
+        </div>
+
+        <div class="faqHeader">Neural Network Specifics</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Who may register for access?</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Anyone may register. Billing is dependent on whether you are affiliated with an academic institution
+                    or a company.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">I want run a protein through the neural net - what are the steps?</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    The steps involved in this process are really simple. All you need to do is:
+                    <ul>
+                        <li>Register an account</li>
+                        <li>Activate your account</li>
+                        <li>Login and go to the <strong>NN</strong> section and upload your protein structure file or
+                        provide the PDB code for the protein.</li>
+                        <li>The results of the Neural Network will be emailed to you.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">What are the payment options?</a>
+                </h4>
+            </div>
+            <div id="collapseEight" class="panel-collapse collapse">
+                <div class="panel-body">
+                    The best way to transfer funds is via Paypal. This secure platform ensures timely payments and a secure environment.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">When do I have to pay?</a>
+                </h4>
+            </div>
+            <div id="collapseNine" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Our standard payment plan provides for monthly payments.
+                    The minimum amount of your balance should be at least 70 USD.
+                </div>
+            </div>
+        </div>
+
+        <div class="faqHeader">Ellington Lab</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Who are we and how do we do what we do?</a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    For the sake of brevity, we kick ass and take names when it comes to science. Our passion comes
+                    from the endless of possibilites in utilizing emerging technologies to discover biological
+                    patterns and engineer biological tools.
+                    <br />
+					We must give credit where credit is due and we would love to thank the lord for providing us
+                    this platform to bring
+					him glory.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">Is this the latest version of the Neural Network</a>
+                </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    This is actually the <strong>third</strong> iteration. We plan to continue to develop new
+                    neural networks and will make them available in the near future.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<style>
+    .faqHeader {
+        font-size: 27px;
+        margin: 20px;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\e072"; /* "play" icon */
+        float: right;
+        color: #F58723;
+        font-size: 18px;
+        line-height: 22px;
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .panel-heading [data-toggle="collapse"].collapsed:after {
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        color: #454444;
+    }
+    .avoid-footer{
+        margin-bottom:300px;
+    }
+    footer {
+        clear: bottom;
+    }
+</style>
+
+<!-- Bootstrap FAQ - END -->
+
+
+
+</body>
+<footer>
+    {% block footer %}
+        <div class="site-footer">
+            {{ super() }}
+        </div>
+    {% endblock footer %}
+</footer>
+
+{% endblock main %}

@@ -2,6 +2,7 @@
 
 	{% block head %}
 	<head>
+
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
@@ -9,19 +10,26 @@
 		<title>Rajhav's Neural Net Homepage</title>
 
 		<!-- Loading third party fonts -->
-		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
-		<link href="../startup_landing/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+		{% block styles %}
 
 
-		<!-- Loading main css file -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../startup_landing/style.css">
+			<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+			<link href="../startup_landing/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-		<!--[if lt IE 9]>
-		<script src="../startup_landing/js/ie-support/html5.js"></script>
-		<script src="../startup_landing/js/ie-support/respond.js"></script>
-		<![endif]-->
 
+			<!-- Loading main css file -->
+			<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+			<link rel="stylesheet" href="../startup_landing/bootstrap-3.3.7/css/bootstrap.css">
+			<link rel="stylesheet" href="../startup_landing/style.css">
+
+
+			<!--[if lt IE 9]>
+			<!--
+			<script src="../startup_landing/js/ie-support/html5.js"></script>
+			<script src="../startup_landing/js/ie-support/respond.js"></script>
+			<![endif]-->
+
+		{% endblock styles %}
 	</head>
 	{% endblock head %}
 
@@ -31,41 +39,39 @@
     {% block content %}
 
         <!--<nav class="navbar navbar-default"></nav> -->
-		<nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse">
-		  <div class="container">
+		<nav class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-header">
-			  <a class="navbar-brand" href="{{ url_for ('homepage') }}">Raghav's Neural Net</a>
+			  <a class="navbar-brand" href="{{ url_for('homepage') }}">Raghav's Neural Net</a>
 			</div>
+			{% block nav %}
 			<ul class="nav navbar-nav">
-
-                {% block nav %}
-			  <li class="active"><a href="{{ url_for('homepage') }}">Home</a></li>
-			  <li><a href="{{ url_for ('NN_page') }}">NN</a></li>
-			  <li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
-                {% endblock nav %}
+				<li class="active"><a href="{{ url_for('homepage') }}">Home</a></li>
+			  	<li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+			  	<li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
 
 			</ul>
-		  </div>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('register_page') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      			<li><a href="{{ url_for('login_page') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<!--<button class="btn btn-primary navbar-nav navbar-right">Login</button>-->
+			</ul>
+			{% endblock nav %}
 		</nav>
-
-
-
     {% block main %}
-
-		<div class="site-content">
-			<header class="hero fix" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
+			<header class="hero fullwidth-block" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
 				<div class="container">
 					{% block center_content %}
 					<div class="hero-content">
 						<h1>Ellington Research Lab Presents... <br>
 							<strong>Raghav's Neural Net</strong></h1>
+						<a class="btn btn-warning" href="{{ url_for('register_page') }}">
+						<strong style="color: black">Register</strong></a>
 					</div>
 					{% endblock center_content %}
 
-					{% block center_form %}
-                    <a class="btn btn-warning" href="{{ url_for('register') }}">
-						<strong style="color: black">Register</strong></a>
-					{% endblock center_form %}
+					<!--{% block center_form %}
+
+					{% endblock center_form %}-->
 
 					<!-- <span class="scrolldown">Scroll down to explore <br><i class="fa fa-chevron-down"></i></span> -->
 				</div>
@@ -74,59 +80,67 @@
 
 
 				<div class="fullwidth-block" data-bg-color="#e6e6e6">
-					<div class="container">
-						<h2 class="section-title">Frequently asked questions</h2>
-						<small class="section-subtitle">Laboriosam nisi aliquid commodi dolor</small>
+					<h2 class="section-title">Modify Proteins with Machine Learning</h2>
+						<small class="section-subtitle">A Neural Network Trained on Protein Crystal Structures</small>
 
+					<div class="container">
 						<div class="row">
 							<div class="col-md-4">
 								<dl>
+									<dt>How was it trained?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<!--
 									<dt>Excepteur sint occaecat cupidatat?</dt>
 									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-
-									<dt>Excepteur sint occaecat cupidatat?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									-->
 								</dl>
 							</div>
 							<div class="col-md-4">
 								<dl>
+									<dt>What does it predict?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<!--
 									<dt>Excepteur sint occaecat cupidatat?</dt>
 									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-
-									<dt>Excepteur sint occaecat cupidatat?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-								</dl>
+									-->
+                                </dl>
 							</div>
 							<div class="col-md-4">
 								<dl>
+									<dt>How to use the Neural Net?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+				        			<!--
 									<dt>Excepteur sint occaecat cupidatat?</dt>
 									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-
-									<dt>Excepteur sint occaecat cupidatat?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									-->
 								</dl>
 							</div>
 						</div> <!-- .row -->
 					</div> <!-- .container -->
 				</div> <!-- .fullwidth-block -->
 
+		    	<!--
 				<div class="fullwidth-block footer-cta" data-bg-image="images/footer-bg.jpg">
 					<div class="container">
 						<div class="hero-content">
 							<h1>Easy way to launch your startup <br><strong>Simple and powerful</strong></h1>
 						</div>
-
+		        		<!--
 						<form class="subscribe-form">
 							<input type="text" placeholder="Enter your email...">
 							<input type="submit" value="Get and acess">
 						</form>
+
 					</div>
 				</div>
+				-->
 			</main> <!-- .main-content -->
 
+			{% block footer %}
 			<footer class="site-footer">
 				<div class="container">
-					<p>Copyright 2014 by Company name, Designed by Themezy. All rights reserved</p>
+					<p>Copyright 2019 by the Ellington Lab at the University of Texas at Austin,
+						Designed by Danny D. All rights reserved</p>
 
 					<div class="social-links">
 						<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
@@ -136,7 +150,7 @@
 					</div>
 				</div>
 			</footer>
-		</div>
+			{% endblock footer %}
 
 
 		<script src="../startup_landing/js/jquery-1.11.1.min.js"></script>

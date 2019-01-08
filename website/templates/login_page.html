@@ -18,12 +18,15 @@
     <div class="container-fluid avoid-navbar">
         <section class="container">
             <div class="container-page">
+                <div class="col-sm-offset-3 col-sm-6 page-header">
+                    <h1 class="dark-grey">Login<small></small></h1>
+                </div>
                 <form method="post">
-                    <div class="col-sm-offset-3 col-sm-12">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <!--
                         <h3 class="dark-grey"><strong>Login</strong></h3>
-
+                        -->
                         {{ form.hidden_tag() }}
-
                         <div class="form-group col-sm-12">
                             {{ form.email.label() }}<br>
                             {{ form.email(size=42) }}<br>
@@ -52,12 +55,7 @@
 
     {% block footer %}
         <div class="navbar-fixed-bottom">
-
             {{ super() }}
-
-
         </div>
-
     {% endblock footer %}
-
 {% endblock main %}

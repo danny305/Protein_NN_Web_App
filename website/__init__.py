@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
 from website.config import DevelopmentConfig
 from os import urandom
@@ -22,6 +23,7 @@ app.config['SECRET_KEY'] = secret_key
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
+jwt = JWTManager(app)
 mail = Mail(app)
 
 Bootstrap(app)

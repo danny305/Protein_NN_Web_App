@@ -68,7 +68,7 @@ class LoginForm(FlaskForm):
         user = Users.query.filter_by(email=self.email.data).first()
         if user:
             if user.check_pw(self.password.data):
-                return "You successfully logged in."
+                return user
             else:
 
                 self.password.errors = ('Incorrect password.',)
@@ -97,7 +97,15 @@ class NNForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+
+    def __init__(self,form,headers):
+        self.headers=headers
+        super(NNForm,self).__init__(form)
+
     def validate(self):
+        user = self.headers
+        print(user)
+        #print([item for item in user['Cookie'].split(';') if item.startswith('session')])
         #ToDo this is where the logic goes to pull the PDB structure from pdb.org
         #ToDo This is where the logic goes to submit a crystal structure file to the NN.
         pass

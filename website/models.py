@@ -3,6 +3,7 @@ from website import app,db, bcrypt
 from sqlalchemy.schema import CheckConstraint
 from datetime import datetime, timedelta
 import jwt
+#from flask_jwt_extended import
 
 
 class Users(db.Model):
@@ -103,5 +104,5 @@ class NN_Query(db.Model):
 
 
     def __repr__(self):
-        return "<NN_Query {}".format(self.query)
+        return "<NN_Query {}>".format(self.pdb_query)
 

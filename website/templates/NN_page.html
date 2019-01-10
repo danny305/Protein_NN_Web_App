@@ -24,78 +24,76 @@
 
 {% block main %}
     <div class="container-fluid avoid-navbar">
-        <section class="container">
-            <div class="container-page">
-                <div class="col-sm-12 page-header">
-                    <h1 class="dark-grey">Protein Crystal Structure Submission<small></small></h1>
-                </div>
-                <form method="post">
-                    <div class="col-sm-12">
-                        <!--
-                        <h3 class="dark-grey"><strong>Login</strong></h3>
-                        -->
-                        {{ form.hidden_tag() }}
-                        <div class="form-group col-sm-12">
-                            {{ form.email.label() }}<br>
-                            {{ form.email(size=42) }}<br>
-                            {% for error in form.email.errors %}
-                            <span style="color : red;">{{error}}</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="form-group col-sm-12">
-                            {{ form.pdb_struct.label() }}<br>
-                            {{ form.pdb_struct(size=42) }}<br>
-                            {% for error in form.pdb_struct.errors %}
-                            <span style="color : red;">{{error}}</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="form-group col-sm-12">
-                            {{ form.cryst_struct_file.label() }}<br>
-                            {{ form.cryst_struct_file() }}<br>
-                            {% for error in form.cryst_struct_file.errors %}
-                            <span style="color : red;">{{error}}</span>
-                            {% endfor %}
-                        </div>
-                         <div class="col-sm-6">
-                            <br>
-                            {{ form.submit(class_="btn btn-primary") }}
-                        </div>
+        <section class="container container-page">
+            <div class="col-sm-12 page-header">
+                <h1 class="dark-grey">Protein Crystal Structure Submission<small></small></h1>
+            </div>
+            <form method="post">
+                <div class="col-sm-12">
+                    <!--
+                    <h3 class="dark-grey"><strong>Login</strong></h3>
+                    -->
+                    {{ form.hidden_tag() }}
+                    <div class="form-group col-sm-12">
+                        {{ form.email.label() }}<br>
+                        {{ form.email(size=42) }}<br>
+                        {% for error in form.email.errors %}
+                        <span style="color : red;">{{error}}</span>
+                        {% endfor %}
                     </div>
-                </form>
-                <div class="container">
-                        <div class="col-md-6 text-justify">
-                            <br><br>
-                        <h3 class="dark-grey"><strong>Upon Submission</strong></h3>
-                        <p>
-                            By clicking on "Submit" you agree to not properly misuse the Neural Network including
-                            the submission of malicious code.
-                        </p>
-                        <p>
-                            We reserve the right to deny access to any data the Neural Net produces.
-                        </p>
-                        <p>
-                            The data will be emailed to you upon completion. We will store a copy of all data
-                            generated.
-                        </p>
-                        <p>
-                            This Protein Neural Net is still an on going research project in the Ellington Research Lab
-                            and may be temporarily offline for updates and the addition of new features.
-                        </p>
-                        <p>
-                            Please visit the FAQ page for additional details.
-                        </p>
 
-                        <br>
+                    <div class="form-group col-sm-12">
+                        {{ form.pdb_struct.label() }}<br>
+                        {{ form.pdb_struct(size=42) }}<br>
+                        {% for error in form.pdb_struct.errors %}
+                        <span style="color : red;">{{error}}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        {{ form.cryst_struct_file.label() }}<br>
+                        {{ form.cryst_struct_file() }}<br>
+                        {% for error in form.cryst_struct_file.errors %}
+                        <span style="color : red;">{{error}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+        </section>
+        <section class="container">
+            <hr>
+            <div class="container">
+                <br>
+                <div class="col-md-6 text-justify">
+                    <h3 class="dark-grey"><strong>Upon Submission</strong></h3>
+                    <p>
+                        By clicking on "Submit" you agree to not properly misuse the Neural Network including
+                        the submission of malicious code.
+                    </p>
+                    <p>
+                        The data will be emailed to you upon completion. We will store a copy of all data
+                        generated.
+                    </p>
+                    <p>
+                        This Protein Neural Net is still an on going research project in the Ellington Research Lab
+                        and may be temporarily offline for updates and the addition of new features.
+                    </p>
+                    <p>
+                        We reserve the right to deny access to any data the Neural Net produces.
+                        Please visit the FAQ page for additional details.
+                    </p>
                 </div>
             </div>
+            <div class="col-sm-6">
+                    <br>
+                    {{ form.submit(class_="btn btn-primary") }}
+            </div>
+            </form>
         </section>
     </div>
-
-    {% block footer %}
-        <div class="">
-            {{ super() }}
-        </div>
-    {% endblock footer %}
 {% endblock main %}
+
+{% block footer %}
+    <div class="">
+        {{ super() }}
+    </div>
+{% endblock footer %}

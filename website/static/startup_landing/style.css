@@ -1125,7 +1125,8 @@ header.hero {
   display: inline-block; }
 
 .hero-content {
-  margin-bottom: 100px;
+  margin-top: 140px;
+  padding-top: 80px;
   color: white;
   text-align: center;
   /*margin-top: 100px;  */ /* This is to move the center text down on the image */
@@ -1156,8 +1157,9 @@ header.hero {
     bottom: 5px; }
 
 .fullwidth-block {
-  padding-top: 100px;
-  padding-bottom: 100px; }
+  padding-top: 10px;
+  padding-bottom: 100px;
+  height: 93vh; }
 
 [data-bg-image] {
   background-size: cover;
@@ -1171,7 +1173,8 @@ header.hero {
   font-size: 48px;
   font-size: 3em;
   color: #50576a;
-  margin: 0 0 10px; }
+  margin: 0 0 10px;
+  padding-top: 60px;}
 
 .section-subtitle {
   font-size: 24px;
@@ -1324,4 +1327,8 @@ dl dd {
 /* Custom CSS for the NN Web app */
 .avoid-navbar {
   margin-top: 40px;
+}
+
+.move-right {
+  padding-left: 20px;
 }

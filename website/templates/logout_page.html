@@ -30,17 +30,16 @@
             <h3>{{ username | lower() }} has successfully
             logged out</h3>
         </div>
-        <div class="container-fluid">
-            <p>Return to <a href="{{ url_for('homepage') }}">homepage.</a></p>
+        <div class="container">
+            <p class="move-right" >Return to <a href="{{ url_for('homepage') }}">homepage.</a></p>
         </div>
     </div>
-
-
-    {% block footer %}
-        <div class="site-footer navbar-fixed-bottom">
-            {{ super() }}
-        </div>
-    {% endblock footer %}
-
-
 {% endblock main %}
+
+{% block footer %}
+    <div class="site-footer navbar-fixed-bottom">
+        {{ super() }}
+    </div>
+{% endblock footer %}
+
+

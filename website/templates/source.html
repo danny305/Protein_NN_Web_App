@@ -78,6 +78,11 @@
 				{% for href,caption in left_navigation_bar %}
 					<li{% if active_page == caption|e %} class="active"{% endif %}><a href="{{ url_for(href|e) }}">{{ caption|e }}</a></li>
 				{% endfor %}
+				{% if active_page == 'Home' %}
+				<li><a href="#about">About</a></li>
+				{% else %}
+				<li><a href="{{ url_for('homepage') }}#about">About</a></li>
+				{% endif %}
 			</ul>
 			{#
 				<!--
@@ -90,7 +95,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				{% for href,glyph,caption in right_navigation_bar %}
 					<li{% if active_page == caption|e %} class="active"{% endif %}><a href="{{ url_for(href|e) }}">
-					<span class="glyphicon glyphicon-{{glyph}}"></span>{{ caption|e }}</a></li>
+					<span class="glyphicon glyphicon-{{glyph}}"></span> {{ caption|e }}</a></li>
 				{% endfor %}
 			</ul>
 
@@ -114,28 +119,33 @@
 		{% endblock nav %}
     {% block main %}
 			<header class="hero fullwidth-block" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
-				<div class="container">
-					{% block center_content %}
-					<div class="hero-content">
-						<h1>Ellington Research Lab Presents... <br>
-							<strong>Raghav's Neural Net</strong></h1>
-						<a class="btn btn-warning" href="{{ url_for('register_page') }}">
-						<strong style="color: black">Register</strong></a>
-						<!--<div class="alert alert-dismissable">{{current_user}}</div>-->
-					</div>
-					{% endblock center_content %}
+
+				{% block center_content %}
+				<div class="hero-content">
+					<h1>Ellington Research Lab Presents... <br>
+						<strong>Raghav's Neural Net</strong></h1>
+					{% if not current_user %}
+					<a class="btn btn-warning" href="{{ url_for('register_page') }}">
+					<strong style="color: black">Register</strong></a>
+					{% elif current_user %}
+					<a class="btn btn-warning" href="{{ url_for('NN_page') }}">
+					<strong style="color: black">Submit NN Query</strong></a>
+					{% endif %}
+
+					<!--<div class="alert alert-dismissable">{{current_user}}</div>-->
+				</div>
+				{% endblock center_content %}
 
 					<!--{% block center_form %}
 
 					{% endblock center_form %}-->
 
 					<!-- <span class="scrolldown">Scroll down to explore <br><i class="fa fa-chevron-down"></i></span> -->
-				</div>
 			</header> <!-- hero -->
 
 
 
-				<div class="fullwidth-block" data-bg-color="#e6e6e6">
+				<div id="about" class="fullwidth-block" data-bg-color="#e6e6e6">
 					<h2 class="section-title">Modify Proteins with Machine Learning</h2>
 						<small class="section-subtitle">A Neural Network Trained on Protein Crystal Structures</small>
 
@@ -192,20 +202,22 @@
 				-->
 			</main> <!-- .main-content -->
 
-			{% block footer %}
-			<footer class="site-footer">
-				<div class="container">
-					<p>Copyright 2019 by the Ellington Lab at the University of Texas at Austin,
-						Designed by Danny D. All rights reserved</p>
+	{% endblock main %}
 
-					<div class="social-links">
-						<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-						<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-						<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
-					</div>
-				</div>
-			</footer>
-			{% endblock footer %}
+	{% block footer %}
+	<footer class="site-footer">
+		<div class="container">
+			<p>Copyright 2019 by the Ellington Lab at the University of Texas at Austin,
+				Designed by Danny D. All rights reserved</p>
+
+			<div class="social-links">
+				<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+				<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+				<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+			</div>
+		</div>
+	</footer>
+	{% endblock footer %}
 
 
 		<script src="../startup_landing/js/jquery-1.11.1.min.js"></script>
@@ -213,8 +225,7 @@
 		<script src="../startup_landing/js/app.js"></script>
 
 
-    {% endblock main %}
 
-    </body>
 
-	{% endblock content %}
+
+{% endblock content %}

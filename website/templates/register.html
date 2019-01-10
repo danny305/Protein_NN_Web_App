@@ -23,7 +23,7 @@
 {% endblock nav %}
 
 {% block main %}
-    <div class="container-fluid avoid-navbar">
+    <div class="container-fluid">
         <section class="container">
             <div class="container-page">
                 <form method="post">
@@ -119,11 +119,12 @@
             </div>
         </section>
     </div>
-    <div class="site-footer">
-    {% block footer %}
-        {{ super() }}
-    {% endblock footer %}
-    </div>
-
-
 {% endblock main %}
+
+<div class="site-footer">
+{% block footer %}
+    {{ super() }}
+{% endblock footer %}
+</div>
+
+

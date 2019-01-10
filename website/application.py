@@ -1,5 +1,6 @@
 from flask import url_for,render_template, redirect,request, jsonify,flash,\
                     make_response, session
+
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                             jwt_required, get_jwt_identity, get_jwt_claims,
                             set_access_cookies,set_refresh_cookies,
@@ -9,7 +10,6 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
                             verify_jwt_refresh_token_in_request)
 
 
-from jwt import decode
 from forms import RegisterForm, LoginForm, NNForm
 from models import Users
 from tools import missing_JWT_token, handle_expired_token
@@ -47,41 +47,23 @@ def FAQ_page():
 @app.route('/token/refresh', methods=['GET','POST'])
 @jwt_refresh_token_required
 def refresh_endpoint():
-    #Create the new access token
+    # Create the new access token from refresh token username passed in.
+    username = request.args['username']
+    print('refresh_endpoint.. creating new access token for user: ', username)
+    access_token = create_access_token(username)
+
+    # #Set the JWT access cookie in the response
+    response = make_response(redirect(request.args['prev_url']))
+    set_access_cookies(response,access_token)
+    return response
+
+    #trouble shooting code
     # ref_token = request.cookies.get('refresh_token_cookie')
     # csrftoken = request.cookies.get('csrftoken')
     # decode_ref_token = decode_token(ref_token)
-
-    #return refresh_token(current_user)
-
     # print('ref_token:', ref_token)
     # print('current_user:', current_user, get_raw_jwt())
-    print('refresh_endpoint')
-    username = request.args['username']
-    print(username)
-    access_token = create_access_token(username)
-    #
-    # #Set the JWT access cookie in the response
-    # print('from refresh():', request.url)
-    response = make_response(redirect(request.args['prev_url']))
-    set_access_cookies(response,access_token)
-    # #set_refresh_cookies()
-    return response
 
-
-
-
-@app.route('/partially-protected', methods=['GET'])
-@jwt_optional
-def partially_protected():
-    # If no JWT is sent in with the request, get_jwt_identity()
-    # will return None
-    current_user = get_jwt_identity()
-    print('current user PARTIALLY Protected:', current_user)
-    if current_user:
-        return jsonify(logged_in_as=current_user), 200
-    else:
-        return jsonify(logged_in_as='anonymous user'), 200
 
 
 
@@ -167,23 +149,40 @@ def logout_page():
 @jwt_required
 def NN_page():
     jwt_claims = get_raw_jwt()
-    print(jwt_claims)
-    print('cookie keys:', request.cookies.get('refresh_token_cookie'))
+    #print(jwt_claims)
+    #print('cookie keys:', request.cookies.get('refresh_token_cookie'))
     user = get_jwt_identity() or None
     print('User:',user)
-    form = NNForm(request.form, headers=request.headers)
-    print(request.form, form.validate_on_submit())
+    form = NNForm(request.form)
+    print(request.data)
+    print(request.form.viewkeys(), form.validate_on_submit())
     if request.method == "POST" and form.validate_on_submit():
 
-        return redirect((url_for("success_NN_submission")))
+        return "Submission successful" #redirect(url_for("success_NN_submission"))
 
     return render_template('NN_page.html', active_page='NN',form=form, current_user=user)
 
 
 
 
+#This function is to test jwt_optional functionality.
+@app.route('/partially-protected', methods=['GET'])
+@jwt_optional
+def partially_protected():
+    # If no JWT is sent in with the request, get_jwt_identity()
+    # will return None
+    current_user = get_jwt_identity()
+    print('current user PARTIALLY Protected:', current_user)
+    if current_user:
+        return jsonify(logged_in_as=current_user), 200
+    else:
+        return jsonify(logged_in_as='anonymous user'), 200
+
+
+
+
 app.route('/submission-successful')
-def success_NN_submission(error):
+def success_NN_submission():
     return "The submitted structure has been accepted by the neural net. " \
            "You will receive an email with the results upon completion. "
 

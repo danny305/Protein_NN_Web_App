@@ -24,27 +24,25 @@
 
 {% block main %}
     <div class="container-fluid">
+        <div class="container page-header move-right">
+            <h1 class="dark-grey">Registration<small></small></h1>
+        </div>
         <section class="container">
             <div class="container-page">
                 <form method="post">
-                    <div class="col-md-12">
-                        <div class="col-sm-12 page-header">
-                            <h1 class="dark-grey">Registration<small></small></h1>
-                        </div>
-                        <!--
-                        <h3 class="pricing-header dark-grey"><strong>Registration</strong></h3>
-                        -->
-                        {{ form.hidden_tag() }}
-
-                        <div class="form-group col-lg-6">
+                    <!--
+                    <h3 class="pricing-header dark-grey"><strong>Registration</strong></h3>
+                    -->
+                    {{ form.hidden_tag() }}
+                    <div class="row container">
+                        <div class="form-group col-md-6">
                             {{ form.first_name.label}}<br>
                             {{ form.first_name(size=42) }}<br>
                             {% for error in form.first_name.errors %}
                             <span style="color : red;">{{error}}</span>
                             {% endfor %}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-md-6">
                             {{ form.last_name.label}}<br>
                             {{ form.last_name(size=42) }}<br>
                             {% if form.last_name.errors %}
@@ -53,40 +51,41 @@
                                 {% endfor %}
                             {% endif%}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                    </div>
+                    <div class="row container">
+                        <div class="form-group col-md-6">
                             {{ form.email.label() }}<br>
                             {{ form.email(size=42) }}<br>
                             {% for error in form.email.errors %}
                             <span style="color : red;">{{error}}</span>
                             {% endfor %}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-md-6">
                             {{ form.retype_email.label()}}<br>
                             {{ form.retype_email(size=42) }}<br>
                             {% for error in form.retype_email.errors %}
                             <span style="color : red;">{{error}}</span>
                             {% endfor %}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                    </div>
+                    <div class="row container">
+                        <div class="form-group col-md-6">
                             {{ form.password.label() }}<br>
                             {{ form.password(size=42) }}<br>
                             {% for error in form.password.errors %}
                             <span style="color : red;">{{error}}</span>
                             {% endfor %}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-md-6">
                             {{ form.retype_password.label() }}<br>
                             {{ form.retype_password(size=42) }}<br>
                             {% for error in form.retype_password.errors %}
                             <span style="color : red;">{{error}}</span>
                             {% endfor %}
                         </div>
-
-                        <div class="form-group col-lg-6">
+                    </div>
+                    <div class="row container">
+                        <div class="form-group col-md-6">
                             {{ form.organization.label('Affiliated Organization')}}<br>
                             {{ form.organization(size=42) }}<br>
                             {% for error in form.organization.errors %}
@@ -94,6 +93,7 @@
                             {% endfor %}
                         </div>
                     </div>
+
 
                     <div class="col-md-6 text-justify">
                         <h3 class="dark-grey"><strong>Terms and Conditions</strong></h3>

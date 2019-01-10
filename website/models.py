@@ -10,12 +10,15 @@ class Users(db.Model):
     __tablename__ = "Users"
     #ToDo create a column for the unique token of a user.
     id = db.Column(db.Integer,primary_key=True)
-    first_name = db.Column(db.String(length=20), nullable=False)
-    last_name = db.Column(db.String(length=20), nullable=False)
+    first_name = db.Column(db.String(length=255), nullable=False)
+    last_name = db.Column(db.String(length=255), nullable=False)
     email = db.Column(db.String(length=80), index=True, unique=True, nullable=False)
-    password = db.Column(db.String(length=25),nullable=False)
-    organization = db.Column(db.String(length=50),nullable=False)
+    password = db.Column(db.String(length=255),nullable=False)
+    organization = db.Column(db.String(length=255),nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
+    confirmation_link_sent_on = db.Column(db.DateTime, nullable=True)
+    email_confirmed = db.Column(db.Boolean, nullable=True, default=False)
+    email_confirmed_on = db.Column(db.DateTime, nullable=True)
     queries = db.relationship("NN_Query",backref="user", lazy='dynamic')
 
 
@@ -29,7 +32,8 @@ class Users(db.Model):
 
 
     def __repr__(self):
-        return '<User %s %s <%s> from %s>' % (self.first_name, self.last_name, self.email, self.organization)
+        return '<User %s %s <%s> from %s>' % \
+               (self.first_name, self.last_name, self.email, self.organization)
 
 
     def encode_auth_token(self, user_id):

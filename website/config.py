@@ -31,7 +31,7 @@ class DevelopmentConfig(BaseConfig):
 
     DEBUG = True
 
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=5)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=60)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=5)
 
     SESSION_COOKIE_SECURE = False

@@ -1,43 +1,49 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, FileField
 from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Email, EqualTo, length
+from wtforms.validators import DataRequired, Email, EqualTo, length, Regexp, Optional
 
-from website.models import Users
+from models import Users
+from tools import NoneRegExp, OrTo
 
 
 class RegisterForm(FlaskForm):
     first_name = StringField('First Name', validators=[
                                            DataRequired("Please provide your first name."),
-                                                     length(min=3,max=20),
+                                                     length(min=3,max=128),
                                                       ])
 
     last_name = StringField('Last Name', validators=[
                                          DataRequired("Please provide your last name."),
-                                                     length(min=3, max=20),
+                                                     length(min=3, max=128),
                                                     ])
 
     organization = StringField("Affiliated Organization",
                                validators=[DataRequired("Please provide your affiliated Organization."),
-                                           length(min=6, max=50),
+                                           length(min=6, max=128),
                                            ])
 
     email = EmailField('Email Address', validators=[
                                         DataRequired("Please provide an email address."),
                                                     Email('Please provide a valid email address.'),
-                                                    length(min=8, max=50),
+                                                    length(min=8, max=128),
+                                                    #Regexp('.+@.+\.edu$', message="Currently only academic email addresses "
+                                                    #                          "are accepted. (.edu)")
                                                     ])
 
     retype_email = EmailField('Confirm Email Address', validators=[
                                                     DataRequired("Please retype your email address."),
                                                     Email('Please provide a valid email address.'),
                                                     length(min=8, max=50),
-                                                    EqualTo('email'),
+                                                    EqualTo('email',message='Emails did not match.'),
                                                     ])
 
     password = PasswordField("Password", validators=[
                                          DataRequired("Please provide a password"),
-                                         length(min=8, max=25),
+                                         length(min=8, max=128),
+                                         # NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
+                                         #            message='Password must contain at least 1 capital, lowercase, number, and symbol.\n'
+                                         #                    'Password must be at least 8 characters long.')
                                          ])
 
     retype_password = PasswordField("Confirm Password", validators=[
@@ -88,24 +94,20 @@ class NNForm(FlaskForm):
 
     #ToDo need to figure out the validators to use for the protein submission.
     pdb_struct = StringField('PDB Structure', validators=[
-                                        DataRequired("Please provide a PDB structure."),
+                                        Optional("Please provide a PDB structure."),
                                         ])
 
     cryst_struct_file = FileField("Crystal Structure File", validators=[
-                                                            "None",
+                                                            OrTo('pdb_struct'),
                                                                 ])
 
     submit = SubmitField('Submit')
 
 
-    def __init__(self,form,headers):
-        self.headers=headers
-        super(NNForm,self).__init__(form)
-
-    def validate(self):
-        user = self.headers
-        print(user)
-        #print([item for item in user['Cookie'].split(';') if item.startswith('session')])
-        #ToDo this is where the logic goes to pull the PDB structure from pdb.org
-        #ToDo This is where the logic goes to submit a crystal structure file to the NN.
-        pass
+    # def validate(self):
+    #     user = self.headers
+    #     print(user)
+    #     #print([item for item in user['Cookie'].split(';') if item.startswith('session')])
+    #     #ToDo this is where the logic goes to pull the PDB structure from pdb.org
+    #     #ToDo This is where the logic goes to submit a crystal structure file to the NN.
+    #     pass

@@ -1,5 +1,7 @@
 {% extends "source.html" %}
 
+{#
+<!--
 {% block nav %}
      <ul class="nav navbar-nav">
 				<li ><a href="{{ url_for('homepage') }}">Home</a></li>
@@ -10,8 +12,14 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="active"><a href="{{ url_for('register_page') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       			<li><a href="{{ url_for('login_page') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-				<!--<button class="btn btn-primary navbar-nav navbar-right">Login</button>-->
+				<button class="btn btn-primary navbar-nav navbar-right">Login</button>
 			</ul>
+{% endblock nav %}
+-->
+#}
+
+{% block nav %}
+    {{super()}}
 {% endblock nav %}
 
 {% block main %}

@@ -1,0 +1,46 @@
+{% extends "source.html" %}
+
+{#
+<!--
+{% block nav %}
+      <ul class="nav navbar-nav">
+				<li><a href="{{ url_for('homepage') }}">Home</a></li>
+			  	<li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+			  	<li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('register_page') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      			<li><a href="{{ url_for('login_page') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<!--<button class="btn btn-primary navbar-nav navbar-right">Login</button>
+			</ul>
+{% endblock nav %}
+-->
+#}
+
+{% block nav %}
+    {{super()}}
+{% endblock nav %}
+
+
+{% block main %}
+
+    <div class="container">
+        <div class="page-header">
+            <h3>{{ username | lower() }} has successfully
+            logged out</h3>
+        </div>
+        <div class="container-fluid">
+            <p>Return to <a href="{{ url_for('homepage') }}">homepage.</a></p>
+        </div>
+    </div>
+
+
+    {% block footer %}
+        <div class="site-footer navbar-fixed-bottom">
+            {{ super() }}
+        </div>
+    {% endblock footer %}
+
+
+{% endblock main %}

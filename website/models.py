@@ -3,7 +3,7 @@ from website import app,db, bcrypt
 from sqlalchemy.schema import CheckConstraint
 from datetime import datetime, timedelta
 import jwt
-#from flask_jwt_extended import
+
 
 
 class Users(db.Model):

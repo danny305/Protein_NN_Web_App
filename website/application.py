@@ -3,10 +3,16 @@ from flask import url_for,render_template, redirect,request, jsonify,flash,\
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                             jwt_required, get_jwt_identity, get_jwt_claims,
                             set_access_cookies,set_refresh_cookies,
-                            unset_jwt_cookies, get_raw_jwt, jwt_refresh_token_required)
+                            unset_jwt_cookies, get_raw_jwt,
+                            jwt_refresh_token_required, jwt_optional,
+                            verify_jwt_in_request_optional,
+                            verify_jwt_refresh_token_in_request)
 
+
+from jwt import decode
 from forms import RegisterForm, LoginForm, NNForm
 from models import Users
+from tools import missing_JWT_token, handle_expired_token
 
 from website import app,db,jwt
 from subprocess import call
@@ -17,35 +23,84 @@ from subprocess import call
 
 
 @app.route('/')
+@jwt_optional
 def homepage():
-    print(request.headers)
-    return render_template('homepage.html')
+    current_user = get_jwt_identity() or None
+    # if current_user == None:
+    #     raise Exception('Anonymous User!!')
+    # else:
+    #return jsonify(current_user=current_user)
+
+    return render_template('homepage.html', active_page='Home', current_user=current_user)
 
 
 
-@app.route('/FAQ/')
+@app.route('/FAQ')
+@jwt_optional
 def FAQ_page():
-    return render_template("FAQ_page.html")
+    current_user = get_jwt_identity() or None
+    return render_template("FAQ_page.html", active_page='FAQ', current_user=current_user)
 
 
+#ToDo When the token expires I get an HTTP status code of 401 I can use expired_token_loader refresh token.
 
 @app.route('/token/refresh', methods=['GET','POST'])
 @jwt_refresh_token_required
-def refresh():
+def refresh_endpoint():
     #Create the new access token
-    current_user = get_jwt_identity()
-    access_token = create_access_token(identity=current_user)
+    # ref_token = request.cookies.get('refresh_token_cookie')
+    # csrftoken = request.cookies.get('csrftoken')
+    # decode_ref_token = decode_token(ref_token)
 
-    #Set the JWT access cookie in the response
-    response = make_response(redirect(request.referrer))
+    #return refresh_token(current_user)
+
+    # print('ref_token:', ref_token)
+    # print('current_user:', current_user, get_raw_jwt())
+    print('refresh_endpoint')
+    username = request.args['username']
+    print(username)
+    access_token = create_access_token(username)
+    #
+    # #Set the JWT access cookie in the response
+    # print('from refresh():', request.url)
+    response = make_response(redirect(request.args['prev_url']))
     set_access_cookies(response,access_token)
+    # #set_refresh_cookies()
     return response
 
 
 
 
+@app.route('/partially-protected', methods=['GET'])
+@jwt_optional
+def partially_protected():
+    # If no JWT is sent in with the request, get_jwt_identity()
+    # will return None
+    current_user = get_jwt_identity()
+    print('current user PARTIALLY Protected:', current_user)
+    if current_user:
+        return jsonify(logged_in_as=current_user), 200
+    else:
+        return jsonify(logged_in_as='anonymous user'), 200
 
-@app.route('/register/', methods=['GET','POST'])
+
+
+@app.route('/token/remove', methods=['GET','POST'])
+@jwt_required
+def logout_endpoint():
+    #ToDo Still need to build the logout page.
+    #response = make_response(redirect(url_for('logout_page')))
+    verify_jwt_refresh_token_in_request()
+    username = get_jwt_identity()
+    response = make_response(redirect(url_for("logout_page",username=username)))
+    unset_jwt_cookies(response)
+    session['successful_logout'] = True
+    return  response
+
+
+
+
+@app.route('/register', methods=['GET','POST'])
 def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
@@ -56,14 +111,14 @@ def register_page():
         user.save_to_db()
         flash("Thanks for Registering. Please login")
 
-        return redirect((url_for("NN_page")))
+        return redirect(url_for("NN_page"))
 
-    return render_template('register.html',form=form)
-
+    return render_template('register.html',active_page='Register', form=form, )
 
 
 
 @app.route('/login/', methods=['GET','POST'])
+@app.route('/login', methods=['GET','POST'])
 def login_page():
     form = LoginForm(request.form)
     print(request.method, request.form)
@@ -83,37 +138,46 @@ def login_page():
             #return jsonify({'access_token':access_token})
             #return redirect((url_for("NN_page")))
 
-    return render_template('login_page.html', form=form)
+    return render_template('login_page.html', active_page='Login', form=form)
 
 
 
 
+@app.route('/logged_out',methods=['GET','POST'])
+def logout_page():
+    #print("session:", session.viewitems())
+    #print(session.pop('successful_logout',False))
+    # if session.pop('successful_logout' == True:
+    #     return render_template('logout_page.html')
+    # else:
+    #    return redirect(url_for('homepage'))
 
-
-@jwt.invalid_token_loader #This allows me to stop people who have not logged in yet.
-def missing_JWT_token(msg):
-    print(msg)
-    return redirect(url_for('login_page'))
-    # return "The site being accessed requires a valid JWT to view." \
-    #        "Error: {}".format(msg)
-
-
-
+    if request.cookies.get('refresh_token_cookie',False):
+        return redirect(url_for('logout_endpoint'))
+    elif session.has_key('successful_logout'):
+        session.pop('successful_logout')
+        return render_template('logout_page.html',
+                               username=request.args.get('username','User'))
+    else:
+        return redirect(url_for('homepage'))
+        #raise Exception('Shit is fucked','Cookies:',request.cookies,
+        #                'Session:', session.viewitems())
 
 @app.route('/NN/', methods=['GET','POST'])
 @jwt_required
 def NN_page():
     jwt_claims = get_raw_jwt()
     print(jwt_claims)
-    user = get_jwt_identity()
-    print('User:',user,)
+    print('cookie keys:', request.cookies.get('refresh_token_cookie'))
+    user = get_jwt_identity() or None
+    print('User:',user)
     form = NNForm(request.form, headers=request.headers)
     print(request.form, form.validate_on_submit())
     if request.method == "POST" and form.validate_on_submit():
 
         return redirect((url_for("success_NN_submission")))
 
-    return render_template('NN_page.html', form=form)
+    return render_template('NN_page.html', active_page='NN',form=form, current_user=user)
 
 
 

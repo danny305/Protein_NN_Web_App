@@ -1,8 +1,9 @@
 import os
 from datetime import timedelta
+from base64 import b64encode
 
 secret_key = os.urandom(24)
-jwt_secret = os.urandom(24)
+jwt_secret_key = b64encode('I_love_my_smokes!')
 
 class BaseConfig(object):
 
@@ -11,13 +12,17 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///Protein_NN.db'
     SQLALCHEMY_TRACK_MODIFICATION = False
 
-    JWT_SECRET_KEY = jwt_secret
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=10)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=1)
+    #WT_SECRET_KEY = jwt_secret_key
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=60)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=12)
     JWT_TOKEN_LOCATION = 'cookies'
-    JWT_REFRESH_COOKIE_PATH ='/token/refresh'
+    #JWT_ACCESS_COOKIE_PATH = '/NN/'
+    #JWT_REFRESH_COOKIE_PATH ='/token/refresh'
+    JWT_COOKIE_CSRF_PROTECT = False
 
     SESSION_COOKIE_SECURE = True
+
+    PROPAGATE_EXCEPTIONS = True
 
 
 
@@ -26,11 +31,11 @@ class DevelopmentConfig(BaseConfig):
 
     DEBUG = True
 
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=20)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=5)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=5)
 
     SESSION_COOKIE_SECURE = False
 
-    #PROPOGATE_EXCEPTION = True
 
     #EMAIL SETTINGS
     MAIL_SERVER = 'smtp.gmail.com'

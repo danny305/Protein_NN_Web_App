@@ -1,4 +1,89 @@
 {% extends "source.html" %}
 
 
+{% block main %}
+			<header class="hero fullwidth-block" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
 
+				{% block center_content %}
+				<div class="hero-content">
+					<h1>Ellington Research Lab Presents... <br>
+						<strong>Raghav's Neural Net</strong></h1>
+					{% if not current_user %}
+					<a class="btn btn-warning" href="{{ url_for('register_page') }}">
+					<strong style="color: black">Register</strong></a>
+					{% elif current_user %}
+					<a class="btn btn-warning" href="{{ url_for('NN_page') }}">
+					<strong style="color: black">Submit NN Query</strong></a>
+					{% endif %}
+
+					<!--<div class="alert alert-dismissable">{{current_user}}</div>-->
+				</div>
+				{% endblock center_content %}
+
+					<!--{% block center_form %}
+
+					{% endblock center_form %}-->
+
+					<!-- <span class="scrolldown">Scroll down to explore <br><i class="fa fa-chevron-down"></i></span> -->
+			</header> <!-- hero -->
+
+
+
+				<div id="about" class="fullwidth-block" data-bg-color="#e6e6e6">
+					<h2 class="section-title">Modify Proteins with Machine Learning</h2>
+						<small class="section-subtitle">A Neural Network Trained on Protein Crystal Structures</small>
+
+					<div class="container">
+						<div class="row">
+							<div class="col-md-4">
+								<dl>
+									<dt>How was it trained?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<!--
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									-->
+								</dl>
+							</div>
+							<div class="col-md-4">
+								<dl>
+									<dt>What does it predict?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<!--
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									-->
+                                </dl>
+							</div>
+							<div class="col-md-4">
+								<dl>
+									<dt>How to use the Neural Net?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+				        			<!--
+									<dt>Excepteur sint occaecat cupidatat?</dt>
+									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									-->
+								</dl>
+							</div>
+						</div> <!-- .row -->
+					</div> <!-- .container -->
+				</div> <!-- .fullwidth-block -->
+
+		    	<!--
+				<div class="fullwidth-block footer-cta" data-bg-image="images/footer-bg.jpg">
+					<div class="container">
+						<div class="hero-content">
+							<h1>Easy way to launch your startup <br><strong>Simple and powerful</strong></h1>
+						</div>
+		        		<!--
+						<form class="subscribe-form">
+							<input type="text" placeholder="Enter your email...">
+							<input type="submit" value="Get and acess">
+						</form>
+
+					</div>
+				</div>
+				-->
+			</main> <!-- .main-content -->
+
+{% endblock main %}

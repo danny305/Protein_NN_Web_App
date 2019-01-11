@@ -3,16 +3,21 @@ from datetime import timedelta
 from base64 import b64encode
 
 secret_key = os.urandom(24)
+mail_secret_key = os.urandom(24)
+mail_salt = os.urandom(24)
 jwt_secret_key = b64encode('I_love_my_smokes!')
 
 class BaseConfig(object):
 
     SECRET_KEY = secret_key
+    MAIL_SECRET_KEY = mail_secret_key
+    MAIL_SALT = mail_salt
+
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///Protein_NN.db'
     SQLALCHEMY_TRACK_MODIFICATION = False
 
-    #WT_SECRET_KEY = jwt_secret_key
+    JWT_SECRET_KEY = jwt_secret_key
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=60)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=12)
     JWT_TOKEN_LOCATION = 'cookies'
@@ -43,8 +48,9 @@ class DevelopmentConfig(BaseConfig):
     #MAIL_PORT = 587  # This is for TLS
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    #MAIL_USERNAME = os.environ['EMAIL_USER']
-    #MAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
+    MAIL_USERNAME = os.environ['MAIL_USER']
+    MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
+    MAIL_DEFAULT_SENDER = os.environ['MAIL_USER']
 
     #BOOTSTRAP_SERVE_LOCAL = True
 

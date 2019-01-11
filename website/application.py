@@ -9,10 +9,13 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
                             verify_jwt_in_request_optional,
                             verify_jwt_refresh_token_in_request)
 
+from sqlalchemy.exc import IntegrityError
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
+from datetime import datetime
 
 from forms import RegisterForm, LoginForm, NNForm
 from models import Users
-from tools import missing_JWT_token, handle_expired_token
+from tools import (create_JWT_token,missing_JWT_token, handle_expired_token,send_confirmation_email)
 
 from website import app,db,jwt
 from subprocess import call
@@ -35,6 +38,8 @@ def homepage():
 
 
 
+
+
 @app.route('/FAQ')
 @jwt_optional
 def FAQ_page():
@@ -42,8 +47,10 @@ def FAQ_page():
     return render_template("FAQ_page.html", active_page='FAQ', current_user=current_user)
 
 
-#ToDo When the token expires I get an HTTP status code of 401 I can use expired_token_loader refresh token.
 
+
+
+#ToDo When the token expires I get an HTTP status code of 401 I can use expired_token_loader refresh token.
 @app.route('/token/refresh', methods=['GET','POST'])
 @jwt_refresh_token_required
 def refresh_endpoint():
@@ -67,6 +74,7 @@ def refresh_endpoint():
 
 
 
+
 @app.route('/token/remove', methods=['GET','POST'])
 @jwt_required
 def logout_endpoint():
@@ -82,20 +90,28 @@ def logout_endpoint():
 
 
 
+
+
 @app.route('/register', methods=['GET','POST'])
 def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
     print( request.method, form.validate_on_submit())
     if request.method == "POST" and form.validate_on_submit():
-        user = Users(form.first_name.data, form.last_name.data, \
-                     form.email.data, form.password.data, form.organization.data)
-        user.save_to_db()
-        flash("Thanks for Registering. Please login")
+        try:
+            user = Users(form.first_name.data, form.last_name.data, \
+                         form.email.data, form.password.data, form.organization.data)
+            user.save_to_db()
 
-        return redirect(url_for("NN_page"))
+            send_confirmation_email(user.email)
+            return redirect(url_for("homepage "))
+        except IntegrityError:
+            db.session.rollback()
+            flash("ERROR! Email: {} already exists.".format(form.email),category='error')
 
     return render_template('register.html',active_page='Register', form=form, )
+
+
 
 
 
@@ -106,6 +122,7 @@ def login_page():
     print(request.method, request.form)
     if request.method == "POST":
         #This checks if the user is in the db and returns the user obj.
+        #Need to write logic to redirect to a page to resend a link if link is lost or expired.
         user = form.validate_on_submit()
         if user:
             access_token = create_access_token(identity=user.email, fresh=True)
@@ -121,6 +138,8 @@ def login_page():
             #return redirect((url_for("NN_page")))
 
     return render_template('login_page.html', active_page='Login', form=form)
+
+
 
 
 
@@ -145,6 +164,11 @@ def logout_page():
         #raise Exception('Shit is fucked','Cookies:',request.cookies,
         #                'Session:', session.viewitems())
 
+
+
+
+
+
 @app.route('/NN/', methods=['GET','POST'])
 @jwt_required
 def NN_page():
@@ -165,6 +189,7 @@ def NN_page():
 
 
 
+
 #This function is to test jwt_optional functionality.
 @app.route('/partially-protected', methods=['GET'])
 @jwt_optional
@@ -181,7 +206,40 @@ def partially_protected():
 
 
 
-app.route('/submission-successful')
+
+@app.route('/email_confirmation/<token>')
+def confirm_email_endpoint(token):
+    confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
+    try:
+        email = confirm_serializer.loads(token,
+                                         salt=app.config['MAIL_SALT'],
+                                         max_age=15) #604800 is 7 days
+    except SignatureExpired:
+        print('The confirmation link has an expired signature.')
+        flash('The confirmation link is invalid or has expired.',category='error')
+        redirect(url_for('login_page'))
+
+    user = Users.query.filter_by(email=email).first()
+
+    if user.email_confirmed:
+        print('User {} has already confirmed his email'.format(user.email))
+        flash('User {} has already confirmed his email'.format(user.email), category='info')
+    else:
+        user.email_confirmed = True
+        user.email_confirmed_on = datetime.now()
+        user.save_to_db()
+        print('Email has been confirmed for {}'.format(user.email))
+        flash('Thank you for confirming your email!',category='message')
+        create_JWT_token(user,'homepage')
+
+    redirect(url_for('homepage'))
+
+
+
+
+
+
+@app.route('/submission-successful')
 def success_NN_submission():
     return "The submitted structure has been accepted by the neural net. " \
            "You will receive an email with the results upon completion. "

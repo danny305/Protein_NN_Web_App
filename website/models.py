@@ -22,14 +22,16 @@ class Users(db.Model):
     queries = db.relationship("NN_Query",backref="user", lazy='dynamic')
 
 
-    def __init__(self,first,last,email,password,organization):
+    def __init__(self,first,last,email,password,organization, confirmation_link_sent_on=None):
         self.first_name = first
         self.last_name = last
         self.email = email
         self.password = bcrypt.generate_password_hash(password).decode()
         self.registered_on = datetime.now()
         self.organization = organization
-
+        self.confirmation_link_sent_on = confirmation_link_sent_on
+        self.email_confirmed = False
+        self.email_confirmed_on = None
 
     def __repr__(self):
         return '<User %s %s <%s> from %s>' % \

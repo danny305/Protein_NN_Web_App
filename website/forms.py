@@ -4,7 +4,7 @@ from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, EqualTo, length, Regexp, Optional
 
 from models import Users
-from tools import NoneRegExp, OrTo
+from tools import NoneRegExp, OrTo, send_confirmation_email
 
 
 class RegisterForm(FlaskForm):
@@ -27,8 +27,8 @@ class RegisterForm(FlaskForm):
                                         DataRequired("Please provide an email address."),
                                                     Email('Please provide a valid email address.'),
                                                     length(min=8, max=128),
-                                                    #Regexp('.+@.+\.edu$', message="Currently only academic email addresses "
-                                                    #                          "are accepted. (.edu)")
+                                                    Regexp('.+@.+\.edu$', message="Currently only academic email addresses "
+                                                                              "are accepted. (.edu)")
                                                     ])
 
     retype_email = EmailField('Confirm Email Address', validators=[
@@ -41,9 +41,9 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password", validators=[
                                          DataRequired("Please provide a password"),
                                          length(min=8, max=128),
-                                         # NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
-                                         #            message='Password must contain at least 1 capital, lowercase, number, and symbol.\n'
-                                         #                    'Password must be at least 8 characters long.')
+                                         NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
+                                                    message='Password must contain at least 1 capital, lowercase, number, and symbol.\n'
+                                                            'Password must be at least 8 characters long.')
                                          ])
 
     retype_password = PasswordField("Confirm Password", validators=[
@@ -74,9 +74,14 @@ class LoginForm(FlaskForm):
         user = Users.query.filter_by(email=self.email.data).first()
         if user:
             if user.check_pw(self.password.data):
-                return user
+                if user.email_confirmed == True:
+                    #I must return the user object bc this is a callback assigned to a variable.
+                    return user
+                else:
+                    self.email.errors = ('Email address has not been confirmed. New link sent.',)
+                    send_confirmation_email(user.email)
+                    return False
             else:
-
                 self.password.errors = ('Incorrect password.',)
                 return False
         else:

@@ -3,14 +3,19 @@
 # from bs4 import BeautifulSoup as bs
 # from functools import wraps
 
-from flask import jsonify, current_app, redirect, url_for, request, make_response
+from flask import render_template, jsonify, current_app, redirect, url_for, request, make_response
 from flask_jwt_extended import (get_raw_jwt,get_jwt_identity,
+                                create_access_token,create_refresh_token,
+                                set_access_cookies,set_refresh_cookies,
                                 verify_jwt_refresh_token_in_request,
                                 unset_jwt_cookies)
 from jwt import ExpiredSignatureError
 from wtforms.validators import Regexp, EqualTo, ValidationError
 
-from website import jwt
+from itsdangerous import URLSafeTimedSerializer
+
+from flask_mail import Message
+from website import app,jwt,mail
 
 # def find_all_css_lines_in_file(filename):
 #     with open("./templates/{}".format(filename),'r') as f:
@@ -19,6 +24,23 @@ from website import jwt
 #     print(soup.find_all('link'))
 #
 # find_all_css_lines_in_file('index.html')
+
+
+
+
+
+def create_JWT_token(user,redirect_page='homepage'):
+    #The user must be a database object.
+    access_token = create_access_token(identity=user.email, fresh=True)
+    refresh_token = create_refresh_token(identity=user.email)
+
+    response = make_response(redirect(url_for(redirect_page)))
+    set_access_cookies(response, access_token)
+    set_refresh_cookies(response, refresh_token)
+    # response.headers['Authorization'] = 'Bearer {}'.format(access_token)
+    print(response)
+    return response
+
 
 
 
@@ -71,6 +93,12 @@ def refresh_token(fn):
 
 
 
+
+
+
+
+
+
 #This is to check if a password does not the regexp. If it does match then pw is not accepted.
 class NoneRegExp(Regexp):
     def __call__(self, form, field, message=None):
@@ -117,3 +145,27 @@ class OrTo(EqualTo):
                 message = field.gettext('{} and {} cannot both be provided'\
                                         .format(other.label.text,field.label.text))
             raise ValidationError(message % d)
+
+
+
+
+def send_email(subject,recipient, text_body, html_body=None):
+    msg = Message(subject, recipients=recipient)
+    msg.body = text_body
+    msg.html = html_body
+    mail.send(msg)
+
+
+
+
+
+def send_confirmation_email(user_email):
+    confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
+    token = confirm_serializer.dumps(user_email,salt=app.config['MAIL_SALT'])
+    confirm_url = url_for('confirm_email_endpoint',token=token, _external=True)
+    html = render_template('email_confirmation_2.html',confirm_url=confirm_url)
+
+    send_email("Confirm Email",
+               [user_email,app.config['MAIL_DEFAULT_SENDER']],
+               html)
+

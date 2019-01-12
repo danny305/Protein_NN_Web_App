@@ -15,7 +15,7 @@ from wtforms.validators import Regexp, EqualTo, ValidationError
 from itsdangerous import URLSafeTimedSerializer
 
 from flask_mail import Message
-from website import app,jwt,mail
+from website import app,jwt,mail #, mailjet
 
 # def find_all_css_lines_in_file(filename):
 #     with open("./templates/{}".format(filename),'r') as f:
@@ -29,6 +29,7 @@ from website import app,jwt,mail
 
 
 
+'''JWT Authentication Helper Functions'''
 def create_JWT_token(user,redirect_page='homepage'):
     #The user must be a database object.
     access_token = create_access_token(identity=user.email, fresh=True)
@@ -40,7 +41,6 @@ def create_JWT_token(user,redirect_page='homepage'):
     # response.headers['Authorization'] = 'Bearer {}'.format(access_token)
     print(response)
     return response
-
 
 
 
@@ -98,7 +98,7 @@ def refresh_token(fn):
 
 
 
-
+'''Form Validation Helper Functions'''
 #This is to check if a password does not the regexp. If it does match then pw is not accepted.
 class NoneRegExp(Regexp):
     def __call__(self, form, field, message=None):
@@ -149,13 +149,41 @@ class OrTo(EqualTo):
 
 
 
-def send_email(subject,recipient, text_body, html_body=None):
+
+'''EMAIL Helper Functions'''
+
+#This is what I used for google
+def send_email(subject,recipient, text_body=None, html_body=None,):
     msg = Message(subject, recipients=recipient)
     msg.body = text_body
     msg.html = html_body
     mail.send(msg)
 
 
+
+
+
+#Mailjet email server settings
+def mj_send_email():
+    # from mailjet import Client
+    # import os
+    # api_key = os.environ['MJ_APIKEY_PUBLIC']
+    # api_secret = os.environ['MJ_APIKEY_PRIVATE']
+    # mailjet = Client(auth=(api_key, api_secret))
+    # data = {
+    #     'FromEmail': 'pilot@mailjet.com',
+    #     'FromName': 'Mailjet Pilot',
+    #     'Subject': 'Your email flight plan!',
+    #     'Text-part': 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
+    #     'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    #     'Recipients': [
+    #         {
+    #             "Email": "passenger@mailjet.com"
+    #         }
+    #     ]
+    # }
+    # result = mailjet.send.create(data=data)
+    pass
 
 
 

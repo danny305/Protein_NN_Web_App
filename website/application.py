@@ -15,10 +15,10 @@ from datetime import datetime
 
 from forms import RegisterForm, LoginForm, NNForm
 from models import Users
-from tools import (create_JWT_token,missing_JWT_token, handle_expired_token,send_confirmation_email)
+from tools import *
 
 from website import app,db,jwt
-from subprocess import call
+
 
 
 
@@ -96,18 +96,28 @@ def logout_endpoint():
 def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
-    print( request.method, form.validate_on_submit())
+    print( "Register page submission:",request.method, form.validate_on_submit())
     if request.method == "POST" and form.validate_on_submit():
         try:
             user = Users(form.first_name.data, form.last_name.data, \
                          form.email.data, form.password.data, form.organization.data)
             user.save_to_db()
+            email_sent =user.send_confirmation_email()
+            #send_confirmation_email(user.email)
+            if email_sent:
+                return redirect(url_for("homepage"))
+            else:
+                return "Registration Failed. Try Again"
 
-            send_confirmation_email(user.email)
-            return redirect(url_for("homepage "))
         except IntegrityError:
+            print('Integrity Error')
             db.session.rollback()
             flash("ERROR! Email: {} already exists.".format(form.email),category='error')
+            return "Integrity Error. User already exists."
+
+    # elif request.method == "POST":
+    #     return "Registration Failed"
+
 
     return render_template('register.html',active_page='Register', form=form, )
 
@@ -125,17 +135,18 @@ def login_page():
         #Need to write logic to redirect to a page to resend a link if link is lost or expired.
         user = form.validate_on_submit()
         if user:
-            access_token = create_access_token(identity=user.email, fresh=True)
-            refresh_token = create_refresh_token(identity=user.email)
-
-            response = make_response(redirect(url_for('NN_page')))
-            set_access_cookies(response, access_token)
-            set_refresh_cookies(response, refresh_token)
-            #response.headers['Authorization'] = 'Bearer {}'.format(access_token)
-            print(response)
-            return response
-            #return jsonify({'access_token':access_token})
-            #return redirect((url_for("NN_page")))
+            create_JWT_token(user)
+            # access_token = create_access_token(identity=user.email, fresh=True)
+            # refresh_token = create_refresh_token(identity=user.email)
+            #
+            # response = make_response(redirect(url_for('NN_page')))
+            # set_access_cookies(response, access_token)
+            # set_refresh_cookies(response, refresh_token)
+            # #response.headers['Authorization'] = 'Bearer {}'.format(access_token)
+            # print(response)
+            # return response
+            # #return jsonify({'access_token':access_token})
+            # #return redirect((url_for("NN_page")))
 
     return render_template('login_page.html', active_page='Login', form=form)
 
@@ -255,4 +266,4 @@ def failed_NN_submission():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)

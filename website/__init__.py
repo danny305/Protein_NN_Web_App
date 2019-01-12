@@ -1,27 +1,27 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+#from mailjet import Client
 
-from website.config import DevelopmentConfig
-from os import urandom
+from website.config import DevelopmentConfig, ProductionConfig
+from os import environ
 
-secret_key = urandom(24)
 
 app = Flask(__name__, static_url_path = "")
-app.config.from_object('website.config.DevelopmentConfig')
-'''
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Protein_NN.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-app.config['SECRET_KEY'] = secret_key
-'''
+env_config = environ['APP_CONFIG']
+config_object = 'website.config.{}'.format(env_config)
+app.config.from_object(config_object)
+#app.config.from_object('website.config.ProductionConfig')
+
+
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 mail = Mail(app)
-
-Bootstrap(app)
+#mailjet = Client(auth=(app.config['MJ_API_PUBLIC_KEY'],app.config['MJ_API_PRIVATE_KEY']))
+bs = Bootstrap(app)

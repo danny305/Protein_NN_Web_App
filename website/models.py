@@ -1,8 +1,12 @@
-from website import app,db, bcrypt
-
+from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.schema import CheckConstraint
 from datetime import datetime, timedelta
 import jwt
+
+from flask import url_for, render_template, make_response, redirect
+
+from website import app,db, bcrypt
+from tools import send_email
 
 
 
@@ -45,13 +49,13 @@ class Users(db.Model):
         """
         try:
             payload = {
-                'exp': datetime.utcnow() + timedelta(days=0,seconds=5),
+                'exp': datetime.utcnow() + timedelta(days=0,minutes=30,seconds=0),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
 
             return jwt.encode(payload=payload,
-                              key=app.config.get('SECRET_KEY'),
+                              key=app.config.get('JWT_SECRET_KEY'),
                               algorithm='HS256'
                               )
 
@@ -66,7 +70,7 @@ class Users(db.Model):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token,key=app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token,key=app.config.get('JWT_SECRET_KEY'))
             return payload['sub']
 
         except jwt.ExpiredSignatureError:
@@ -83,6 +87,36 @@ class Users(db.Model):
 
     def check_pw(self,form_pw):
         return bcrypt.check_password_hash(self.password,form_pw)
+
+
+    def check_user_confirmed(self):
+        return self.email_confirmed
+
+
+    def confirm_email(self):
+        self.email_confirmed = True
+        self.save_to_db()
+        return self.email_confirmed
+
+
+    def send_confirmation_email(self):
+        if not self.email_confirmed:
+            confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
+            token = confirm_serializer.dumps(self.email, salt=app.config['MAIL_SALT'])
+            confirm_url = url_for('confirm_email_endpoint', token=token, _external=True)
+            html = render_template('email_confirmation_2.html', confirm_url=confirm_url)
+            try:
+                send_email("Confirm Email",
+                           [self.email], #, app.config['MAIL_DEFAULT_SENDER']],
+                           html_body=html)
+            except Exception as e:
+                print('Error occurred while sending {} their confirmation email.\n'.format(self.email), e)
+                return False
+
+            return True
+
+        else:
+            print("{} had their email confirmed on {}".format(self.email, self.email_confirmed_on))
 
 
 class NN_Query(db.Model):

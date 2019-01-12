@@ -9,25 +9,48 @@ jwt_secret_key = b64encode('I_love_my_smokes!')
 
 class BaseConfig(object):
 
-    SECRET_KEY = secret_key
-    MAIL_SECRET_KEY = mail_secret_key
-    MAIL_SALT = mail_salt
+    # FLASK SETTINGS
+    SECRET_KEY = os.environ['SECRET_KEY'] or secret_key
+    PROPAGATE_EXCEPTIONS = True
+    SESSION_COOKIE_SECURE = True
 
 
+    # DATABASE SETTINGS
     SQLALCHEMY_DATABASE_URI = 'sqlite:///Protein_NN.db'
     SQLALCHEMY_TRACK_MODIFICATION = False
 
-    JWT_SECRET_KEY = jwt_secret_key
+
+    # JWT SETTINGS
+    JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY'] or jwt_secret_key
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=60)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=12)
     JWT_TOKEN_LOCATION = 'cookies'
-    #JWT_ACCESS_COOKIE_PATH = '/NN/'
-    #JWT_REFRESH_COOKIE_PATH ='/token/refresh'
     JWT_COOKIE_CSRF_PROTECT = False
 
-    SESSION_COOKIE_SECURE = True
 
-    PROPAGATE_EXCEPTIONS = True
+    #JWT_ACCESS_COOKIE_PATH = '/NN/'
+    #JWT_REFRESH_COOKIE_PATH ='/token/refresh'
+
+
+    # EMAIL SETTINGS
+    MAIL_SECRET_KEY = os.environ['MAIL_SECRET_KEY'] or mail_secret_key
+    MAIL_SALT = mail_salt
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    # MAIL_PORT = 587  # This is for TLS
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.environ['MAIL_USER']
+    MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
+    MAIL_DEFAULT_SENDER = os.environ['MAIL_USER']
+
+    # MAILJET SETTINGS
+    API_KEY = os.environ['MJ_API_PUBLIC_KEY']
+    API_SECRET = os.environ['MJ_API_PRIVATE_KEY']
+
+
+    #BOOTSTRAP SETTINGS
+    #BOOTSTRAP_SERVE_LOCAL = True
 
 
 
@@ -37,22 +60,14 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=60)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=5)
-
-    SESSION_COOKIE_SECURE = False
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=10)
 
 
-    #EMAIL SETTINGS
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
-    #MAIL_PORT = 587  # This is for TLS
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ['MAIL_USER']
-    MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
-    MAIL_DEFAULT_SENDER = os.environ['MAIL_USER']
+class ProductionConfig(BaseConfig):
 
-    #BOOTSTRAP_SERVE_LOCAL = True
+    DEBUG =False
+
+
 
 
 

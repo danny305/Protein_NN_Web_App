@@ -10,46 +10,48 @@ from tools import NoneRegExp, OrTo, send_confirmation_email
 class RegisterForm(FlaskForm):
     first_name = StringField('First Name', validators=[
                                            DataRequired("Please provide your first name."),
-                                                     length(min=3,max=128),
+                                                     length(min=2,max=128),
                                                       ])
 
     last_name = StringField('Last Name', validators=[
                                          DataRequired("Please provide your last name."),
-                                                     length(min=3, max=128),
+                                                     length(min=2, max=128),
                                                     ])
 
     organization = StringField("Affiliated Organization",
                                validators=[DataRequired("Please provide your affiliated Organization."),
                                            length(min=6, max=128),
+                                            #ToDo write validator to check for multiple words to make sure its nots an acryonym
                                            ])
 
     email = EmailField('Email Address', validators=[
                                         DataRequired("Please provide an email address."),
                                                     Email('Please provide a valid email address.'),
                                                     length(min=8, max=128),
-                                                    Regexp('.+@.+\.edu$', message="Currently only academic email addresses "
-                                                                              "are accepted. (.edu)")
+                                                    # Regexp('.+@.+\.edu$', message="Currently only academic email "
+                                                    #                               "addresses are accepted. (.edu)"),
                                                     ])
 
     retype_email = EmailField('Confirm Email Address', validators=[
                                                     DataRequired("Please retype your email address."),
                                                     Email('Please provide a valid email address.'),
-                                                    length(min=8, max=50),
+                                                    length(min=8, max=128),
                                                     EqualTo('email',message='Emails did not match.'),
                                                     ])
 
     password = PasswordField("Password", validators=[
                                          DataRequired("Please provide a password"),
                                          length(min=8, max=128),
-                                         NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
-                                                    message='Password must contain at least 1 capital, lowercase, number, and symbol.\n'
-                                                            'Password must be at least 8 characters long.')
+                                         # NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
+                                         #            message='Password must contain at least 1 capital, lowercase, '
+                                         #                    'number, and symbol.\nPassword must be at least 8 '
+                                         #                    'characters long.'),
                                          ])
 
     retype_password = PasswordField("Confirm Password", validators=[
                                                         DataRequired("Please retype your password"),
-                                                        length(min=8, max=25),
-                                                        EqualTo('password'),
+                                                        length(min=8, max=128),
+                                                        EqualTo('password',message='Passwords did not match.'),
                                                         ])
     submit = SubmitField('Register')
 
@@ -58,12 +60,15 @@ class LoginForm(FlaskForm):
     email = EmailField("Email Address", validators=[
                                         DataRequired("Please provide your email address."),
                                         Email('Make sure you typed in your email correctly.'),
-                                        length(min=8, max=50),
+                                        length(min=8, max=128),
                                         ])
 
     password = PasswordField("Password", validators=[
                                         DataRequired("Please provide your password"),
                                         length(min=8, max=25),
+                                        NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
+                                            message='Password must contain at least 1 capital, lowercase, number, '
+                                                    'and symbol.\nPassword must be at least 8 characters long.'),
                                         ])
     submit = SubmitField('Login')
 

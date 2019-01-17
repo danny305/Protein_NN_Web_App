@@ -65,7 +65,7 @@ class LoginForm(FlaskForm):
 
     password = PasswordField("Password", validators=[
                                         DataRequired("Please provide your password"),
-                                        length(min=8, max=25),
+                                        length(min=8, max=128),
                                         NoneRegExp('^([^0-9]*|[^A-Z]*|[^a-z]*|[^0-9A-Za-z ]*)$',
                                             message='Password must contain at least 1 capital, lowercase, number, '
                                                     'and symbol.\nPassword must be at least 8 characters long.'),
@@ -93,7 +93,7 @@ class LoginForm(FlaskForm):
             self.email.errors = ('Unknown email address.',)
             return False
 
-    
+
 class NNForm(FlaskForm):
     #Todo The validator for email must be pulled from a sql database/JWT from the user.
     email = EmailField("Email Address", validators=[

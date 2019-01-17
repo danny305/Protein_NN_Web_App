@@ -15,7 +15,7 @@ from wtforms.validators import Regexp, EqualTo, ValidationError
 from itsdangerous import URLSafeTimedSerializer
 
 from flask_mail import Message
-from website import app,jwt,mail #, mailjet
+from website import app,jwt,mail, mj
 
 # def find_all_css_lines_in_file(filename):
 #     with open("./templates/{}".format(filename),'r') as f:
@@ -65,6 +65,7 @@ def handle_expired_token():
 
 
 #This allows me to stop people who have not logged in yet.
+@jwt.unauthorized_loader
 @jwt.invalid_token_loader
 def missing_JWT_token(msg):
     print('from missing_JWT_token:', msg)
@@ -153,8 +154,8 @@ class OrTo(EqualTo):
 '''EMAIL Helper Functions'''
 
 #This is what I used for google
-def send_email(subject,recipient, text_body=None, html_body=None,):
-    msg = Message(subject, recipients=recipient)
+def send_email(subject,recipient, text_body=None, html_body=None):
+    msg = Message(subject, recipients=recipient, sender=app.config['MAIL_USERNAME'])
     msg.body = text_body
     msg.html = html_body
     mail.send(msg)
@@ -164,36 +165,36 @@ def send_email(subject,recipient, text_body=None, html_body=None,):
 
 
 #Mailjet email server settings
-def mj_send_email():
-    # from mailjet import Client
-    # import os
-    # api_key = os.environ['MJ_APIKEY_PUBLIC']
-    # api_secret = os.environ['MJ_APIKEY_PRIVATE']
-    # mailjet = Client(auth=(api_key, api_secret))
-    # data = {
-    #     'FromEmail': 'pilot@mailjet.com',
-    #     'FromName': 'Mailjet Pilot',
-    #     'Subject': 'Your email flight plan!',
-    #     'Text-part': 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
-    #     'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
-    #     'Recipients': [
-    #         {
-    #             "Email": "passenger@mailjet.com"
-    #         }
-    #     ]
-    # }
-    # result = mailjet.send.create(data=data)
-    pass
+def mj_send_email(recipient,sender="confirm_email_nn_app@yahoo.com",
+                  subject='Confirm your email', text_body=None, html_body=None):
+    data = {
+        'FromEmail': sender,
+        'FromName': '<no-reply-email_confirmation>',
+        'Subject': subject,
+        'Text-part': text_body,
+        'Html-part': html_body,
+        'Recipients': [
+            {
+                "Email": recipient
+            }
+        ]
+    }
+    result = mj.send.create(data=data)
+    #pass
 
 
 
-def send_confirmation_email(user_email):
+def send_confirmation_email(user_email='danny.jesus.diaz.94@gmail.com'):
     confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
     token = confirm_serializer.dumps(user_email,salt=app.config['MAIL_SALT'])
     confirm_url = url_for('confirm_email_endpoint',token=token, _external=True)
+    print(confirm_url)
     html = render_template('email_confirmation_2.html',confirm_url=confirm_url)
 
     send_email("Confirm Email",
                [user_email,app.config['MAIL_DEFAULT_SENDER']],
-               html)
+               text_body=confirm_url,
+               html_body=html)
+
+    #mj_send_email(recipient=user_email,html_body=html)
 

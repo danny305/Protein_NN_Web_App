@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-#from mailjet import Client
+from mailjet_rest import Client
 
 from website.config import DevelopmentConfig, ProductionConfig
 from os import environ
@@ -23,5 +23,5 @@ migrate = Migrate(app,db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 mail = Mail(app)
-#mailjet = Client(auth=(app.config['MJ_API_PUBLIC_KEY'],app.config['MJ_API_PRIVATE_KEY']))
+mj = Client(auth=(app.config['MJ_API_PUBLIC_KEY'],app.config['MJ_API_PRIVATE_KEY']))
 bs = Bootstrap(app)

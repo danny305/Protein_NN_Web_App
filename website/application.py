@@ -10,7 +10,7 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
                             verify_jwt_refresh_token_in_request)
 
 from sqlalchemy.exc import IntegrityError
-from itsdangerous import URLSafeTimedSerializer,SignatureExpired
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired, BadTimeSignature
 from datetime import datetime
 
 from forms import RegisterForm, LoginForm, NNForm
@@ -95,15 +95,17 @@ def logout_endpoint():
 @app.route('/register', methods=['GET','POST'])
 def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
-    form = RegisterForm(request.form)
+    form = RegisterForm()
+    print(request.form)
     print( "Register page submission:",request.method, form.validate_on_submit())
+    print(form.errors)
     if request.method == "POST" and form.validate_on_submit():
         try:
             user = Users(form.first_name.data, form.last_name.data, \
                          form.email.data, form.password.data, form.organization.data)
             user.save_to_db()
             email_sent =user.send_confirmation_email()
-            #send_confirmation_email(user.email)
+            send_confirmation_email(user.email)
             if email_sent:
                 return redirect(url_for("homepage"))
             else:
@@ -221,14 +223,18 @@ def partially_protected():
 @app.route('/email_confirmation/<token>')
 def confirm_email_endpoint(token):
     confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
+    email = None
     try:
         email = confirm_serializer.loads(token,
                                          salt=app.config['MAIL_SALT'],
-                                         max_age=15) #604800 is 7 days
+                                         max_age=3600) #604800 is 7 days
     except SignatureExpired:
         print('The confirmation link has an expired signature.')
         flash('The confirmation link is invalid or has expired.',category='error')
         redirect(url_for('login_page'))
+
+    except BadTimeSignature:
+
 
     user = Users.query.filter_by(email=email).first()
 

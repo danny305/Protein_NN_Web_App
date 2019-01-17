@@ -103,11 +103,11 @@ class Users(db.Model):
         if not self.email_confirmed:
             confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
             token = confirm_serializer.dumps(self.email, salt=app.config['MAIL_SALT'])
-            confirm_url = url_for('confirm_email_endpoint', token=token, _external=True)
-            html = render_template('email_confirmation_2.html', confirm_url=confirm_url)
+            confirmation_url = url_for('confirm_email_endpoint', token=token, _external=True)
+            html = render_template('email_confirmation_2.html', confirm_url=confirmation_url)
             try:
                 send_email("Confirm Email",
-                           [self.email], #, app.config['MAIL_DEFAULT_SENDER']],
+                           [self.email, app.config['MAIL_DEFAULT_SENDER']],
                            html_body=html)
             except Exception as e:
                 print('Error occurred while sending {} their confirmation email.\n'.format(self.email), e)

@@ -105,7 +105,6 @@ def register_page():
                          form.email.data, form.password.data, form.organization.data)
             user.save_to_db()
             email_sent =user.send_confirmation_email()
-            send_confirmation_email(user.email)
             if email_sent:
                 return redirect(url_for("homepage"))
             else:
@@ -119,8 +118,6 @@ def register_page():
 
     # elif request.method == "POST":
     #     return "Registration Failed"
-
-
     return render_template('register.html',active_page='Register', form=form, )
 
 
@@ -137,7 +134,8 @@ def login_page():
         #Need to write logic to redirect to a page to resend a link if link is lost or expired.
         user = form.validate_on_submit()
         if user:
-            create_JWT_token(user)
+            print('Form validated, user obtained: {}'.format(user.email))
+            return create_JWT_n_redirect(user)
             # access_token = create_access_token(identity=user.email, fresh=True)
             # refresh_token = create_refresh_token(identity=user.email)
             #
@@ -227,27 +225,31 @@ def confirm_email_endpoint(token):
     try:
         email = confirm_serializer.loads(token,
                                          salt=app.config['MAIL_SALT'],
-                                         max_age=3600) #604800 is 7 days
+                                         max_age=86400) #604800 is 7 days
     except SignatureExpired:
         print('The confirmation link has an expired signature.')
         flash('The confirmation link is invalid or has expired.',category='error')
         redirect(url_for('login_page'))
 
     except BadTimeSignature:
+        print('The token has expired. The token is only valid for {}'.format(email.max_age))
 
 
     user = Users.query.filter_by(email=email).first()
 
+    print('Confirming email for {}'.format(user.email))
     if user.email_confirmed:
         print('User {} has already confirmed his email'.format(user.email))
         flash('User {} has already confirmed his email'.format(user.email), category='info')
+        #ToDo I need to create a already confirmed email page.
+        return redirect(url_for('login_page'))
     else:
         user.email_confirmed = True
         user.email_confirmed_on = datetime.now()
         user.save_to_db()
         print('Email has been confirmed for {}'.format(user.email))
         flash('Thank you for confirming your email!',category='message')
-        create_JWT_token(user,'homepage')
+        return create_JWT_n_redirect(user, 'homepage')
 
     redirect(url_for('homepage'))
 

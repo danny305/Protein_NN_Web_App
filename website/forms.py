@@ -81,6 +81,7 @@ class LoginForm(FlaskForm):
             if user.check_pw(self.password.data):
                 if user.email_confirmed == True:
                     #I must return the user object bc this is a callback assigned to a variable.
+                    print('User email has been confirmed')
                     return user
                 else:
                     self.email.errors = ('Email address has not been confirmed. New link sent.',)

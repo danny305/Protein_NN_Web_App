@@ -30,7 +30,7 @@ from website import app,jwt,mail, mj
 
 
 '''JWT Authentication Helper Functions'''
-def create_JWT_token(user,redirect_page='homepage'):
+def create_JWT_n_redirect(user, redirect_page='homepage'):
     #The user must be a database object.
     access_token = create_access_token(identity=user.email, fresh=True)
     refresh_token = create_refresh_token(identity=user.email)
@@ -183,15 +183,20 @@ def mj_send_email(recipient,sender="confirm_email_nn_app@yahoo.com",
     #pass
 
 
-
-def send_confirmation_email(user_email='danny.jesus.diaz.94@gmail.com'):
+"""
+This is to send an email other than the confirmation email. The function for email
+confirmation is a method in the User model. 
+"""
+def send_confirmation_email(user_email='danny.jesus.diaz.94@gmail.com',
+                            subject='NN Web App email',
+                            html_template='email_confirmation_2.html'):
     confirm_serializer = URLSafeTimedSerializer(app.config['MAIL_SECRET_KEY'])
     token = confirm_serializer.dumps(user_email,salt=app.config['MAIL_SALT'])
     confirm_url = url_for('confirm_email_endpoint',token=token, _external=True)
     print(confirm_url)
-    html = render_template('email_confirmation_2.html',confirm_url=confirm_url)
+    html = render_template(html_template,confirm_url=confirm_url)
 
-    send_email("Confirm Email",
+    send_email(subject,
                [user_email,app.config['MAIL_DEFAULT_SENDER']],
                text_body=confirm_url,
                html_body=html)

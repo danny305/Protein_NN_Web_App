@@ -1,7 +1,3 @@
-# import re
-# import codecs
-# from bs4 import BeautifulSoup as bs
-# from functools import wraps
 
 from flask import render_template, jsonify, current_app, redirect, url_for, request, make_response
 from flask_jwt_extended import (get_raw_jwt,get_jwt_identity,
@@ -13,17 +9,8 @@ from jwt import ExpiredSignatureError
 from wtforms.validators import Regexp, EqualTo, ValidationError
 
 from itsdangerous import URLSafeTimedSerializer
-
 from flask_mail import Message
-from website import app,jwt,mail, mj
-
-# def find_all_css_lines_in_file(filename):
-#     with open("./templates/{}".format(filename),'r') as f:
-#         soup = bs(f.read(),'lxml')
-#     print(soup.prettify())
-#     print(soup.find_all('link'))
-#
-# find_all_css_lines_in_file('index.html')
+from . import app,jwt,mail, mj
 
 
 
@@ -68,7 +55,7 @@ def handle_expired_token():
 @jwt.unauthorized_loader
 @jwt.invalid_token_loader
 def missing_JWT_token(msg):
-    print('from missing_JWT_token:', msg)
+    print('from missing_JWT_token func:', msg)
     response = make_response(redirect(url_for('login_page')))
     unset_jwt_cookies(response)
     return response

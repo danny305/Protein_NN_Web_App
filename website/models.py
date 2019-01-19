@@ -5,7 +5,7 @@ import jwt
 
 from flask import url_for, render_template, make_response, redirect
 
-from website import app,db, bcrypt
+from . import app,db, bcrypt
 from tools import send_email
 
 

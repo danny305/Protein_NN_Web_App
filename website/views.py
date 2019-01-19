@@ -17,7 +17,7 @@ from forms import RegisterForm, LoginForm, NNForm
 from models import Users
 from tools import *
 
-from website import app,db,jwt
+from . import app,db,jwt
 
 
 
@@ -256,6 +256,17 @@ def confirm_email_endpoint(token):
 
 
 
+@app.errorhandler(404)
+def not_found_error(error):
+    #ToDo need to create this html page
+    return jsonify(Error=404, msg='Page Not Found.'), 404
+
+
+@app.errorhandler(500)
+def not_found_error(error):
+    #ToDo need to create this html page
+    return jsonify(Error=500, msg='Server Error.'), 500
+
 
 
 @app.route('/submission-successful')
@@ -273,5 +284,4 @@ def failed_NN_submission():
            "try again."
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+

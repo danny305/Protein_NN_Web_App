@@ -1,4 +1,4 @@
-from website import app
+from website import app, views
 
 
 if __name__=="__main__":

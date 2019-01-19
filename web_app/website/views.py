@@ -276,7 +276,6 @@ def success_NN_submission():
 
 
 
-
 app.route('/submission-failed')
 def failed_NN_submission():
     return "The submitted structure was not accepted by the neural network. " \

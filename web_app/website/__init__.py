@@ -10,9 +10,11 @@ from mailjet_rest import Client
 from config import DevelopmentConfig, ProductionConfig
 from os import environ,getcwd
 
+import logging
+
 pwd = getcwd()
 app = Flask(__name__, static_url_path = "")
-env_config = environ['APP_CONFIG']
+env_config = environ.get('APP_CONFIG',"ProductionConfig")
 
 #environ['PATH'] += ':' + pwd
 print(pwd)
@@ -20,6 +22,10 @@ config_object = 'website.config.{}'.format(env_config)
 app.config.from_object(config_object)
 #app.config.from_pyfile('config.py')
 
+if __name__ != '__main__':
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)

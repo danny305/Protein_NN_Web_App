@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, length, Regexp, Opt
 from models import Users
 from tools import NoneRegExp, OrTo, send_confirmation_email
 
+from . import app
 
 class RegisterForm(FlaskForm):
     first_name = StringField('First Name', validators=[
@@ -82,16 +83,21 @@ class LoginForm(FlaskForm):
                 if user.email_confirmed == True:
                     #I must return the user object bc this is a callback assigned to a variable.
                     print('User email has been confirmed')
+                    app.logger.info('Email address for: {} has been confirmed.'.format(user.email))
                     return user
                 else:
-                    self.email.errors = ('Email address has not been confirmed. New link sent.',)
-                    send_confirmation_email(user.email)
+                    self.email.errors = ('Email address has not been confirmed. New link sent.',) #This must be a tuple
+                    user.send_confirmation_email()
+                    app.logger.error('User: {} has not confirmed email address. New confirmation linked '
+                                     'sent'.format(user.email))
                     return False
             else:
                 self.password.errors = ('Incorrect password.',)
+                app.logger.error('User: {} has entered an incorrect email'.format(user.email))
                 return False
         else:
-            self.email.errors = ('Unknown email address.',)
+            self.email.errors = ('Unknown email address.',) #This must be a tuple
+            app.logger.error('Unknown email address has attempted to login.')
             return False
 
 

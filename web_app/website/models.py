@@ -83,6 +83,7 @@ class Users(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+        app.logger.info('Successfully saved to DB.')
 
 
     def check_pw(self,form_pw):
@@ -90,12 +91,14 @@ class Users(db.Model):
 
 
     def check_user_confirmed(self):
+        app.logger.info('check if user confirmed: {}'.format(self.email_confirmed))
         return self.email_confirmed
 
 
     def confirm_email(self):
         self.email_confirmed = True
         self.save_to_db()
+        app.logger.info('Email confirmed and updated DB: {}'.format(self.email_confirmed))
         return self.email_confirmed
 
 
@@ -109,8 +112,10 @@ class Users(db.Model):
                 send_email("Confirm Email",
                            [self.email, app.config['MAIL_DEFAULT_SENDER']],
                            html_body=html)
+                app.logger.info('successfully sent email from : {}'.format(app.config['MAIL_DEFAULT_SENDER']))
             except Exception as e:
                 print('Error occurred while sending {} their confirmation email.\n'.format(self.email), e)
+                app.logger.error('Error occurred while sending {} their confirmation email.\n'.format(self.email), e)
                 return False
 
             return True

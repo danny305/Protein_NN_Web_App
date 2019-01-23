@@ -62,7 +62,7 @@ def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
     app.logger.debug(request.form)
-    app.logger.info( "Register page submission:",request.method, form.validate_on_submit())
+    app.logger.info( "Register page submission: {}, {}".format(request.method, form.validate_on_submit()))
     app.logger.warning(form.errors)
     if request.method == "POST" and form.validate_on_submit():
         try:
@@ -202,7 +202,7 @@ def partially_protected():
 def refresh_endpoint():
     # Create the new access token from refresh token username passed in.
     username = request.args['username']
-    app.logger.info('refresh_endpoint.. creating new access token for user: ', username)
+    app.logger.info('refresh_endpoint.. creating new access token for user: {}'.format(username))
     access_token = create_access_token(username)
 
     # #Set the JWT access cookie in the response
@@ -268,10 +268,10 @@ def confirm_email_endpoint(token):
     user = Users.query.filter_by(email=email).first()
 
     print('Confirming email for {}'.format(user.email))
-    app.logging.error('confirming email for: {}'.format(user.email))
+    app.logger.error('confirming email for: {}'.format(user.email))
     if user.email_confirmed:
         print('User {} has already confirmed his email'.format(user.email))
-        app.logging.warning('User {} has already confirmed his email'.format(user.email))
+        app.logger.warning('User {} has already confirmed his email'.format(user.email))
         flash('User {} has already confirmed his email'.format(user.email), category='info')
         #ToDo I need to create a already confirmed email page.
         return redirect(url_for('login_page'))
@@ -280,7 +280,7 @@ def confirm_email_endpoint(token):
         user.email_confirmed_on = datetime.now()
         user.save_to_db()
         print('Email has been successfully confirmed for {}'.format(user.email))
-        app.logging.info('Email has been successfully confirmed for {}'.format(user.email))
+        app.logger.info('Email has been successfully confirmed for {}'.format(user.email))
         flash('Thank you for confirming your email!',category='message')
         return create_JWT_n_redirect(user, 'homepage')
 

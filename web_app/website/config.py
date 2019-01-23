@@ -12,7 +12,8 @@ class BaseConfig(object):
     # FLASK SETTINGS
     SECRET_KEY = os.environ.get('SECRET_KEY', secret_key)
     PROPAGATE_EXCEPTIONS = True
-    SESSION_COOKIE_SECURE = True
+    #SESSION_COOKIE_SECURE = True #ONLY set to True if HTTPS is enabled.
+    #SERVER_NAME = '52.12.118.101:8000'
 
 
     # DATABASE SETTINGS
@@ -64,8 +65,8 @@ class DevelopmentConfig(BaseConfig):
 
     DEBUG = True
 
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=60)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=10)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=600)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(minutes=30)
 
 
 class ProductionConfig(BaseConfig):

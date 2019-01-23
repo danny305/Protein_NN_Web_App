@@ -1,4 +1,5 @@
 from flask import Flask
+#from flask_wtf import CSRFProtect
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -29,6 +30,7 @@ if __name__ != '__main__':
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
+#csrf = CSRFProtect(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 mail = Mail(app)

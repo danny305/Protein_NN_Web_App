@@ -1,0 +1,4 @@
+/web_app/flask_env.sh
+/*/*/*.pyc
+/*/*.pyc
+/NN_files/*

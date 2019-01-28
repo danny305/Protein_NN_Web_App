@@ -13,7 +13,7 @@ class BaseConfig(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', secret_key)
     PROPAGATE_EXCEPTIONS = True
     #SESSION_COOKIE_SECURE = True #ONLY set to True if HTTPS is enabled.
-    #SERVER_NAME = '52.12.118.101:8000'
+    #SERVER_NAME = '52.11.200.151:8000'
 
 
     # DATABASE SETTINGS

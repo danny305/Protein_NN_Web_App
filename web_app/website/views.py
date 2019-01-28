@@ -28,7 +28,7 @@ from . import app,db,jwt
 @app.route('/')
 @jwt_optional
 def homepage():
-    app.logger.info('Active Page: Homepage')
+    app.logger.info('Active Page: Homepage.')
     current_user = get_jwt_identity() or None
     # if current_user == None:
     #     raise Exception('Anonymous User!!')
@@ -62,8 +62,8 @@ def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
     app.logger.debug(request.form)
-    app.logger.info( "Register page submission: {}, {}".format(request.method, form.validate_on_submit()))
-    app.logger.warning(form.errors)
+    app.logger.info( "Register page submission and validation: {}, {}".format(request.method, form.validate_on_submit()))
+    app.logger.warning("Form errors: {}".format(form.errors))
     if request.method == "POST" and form.validate_on_submit():
         try:
             user = Users(form.first_name.data, form.last_name.data, \
@@ -97,14 +97,15 @@ def register_page():
 @app.route('/login', methods=['GET','POST'])
 def login_page():
     form = LoginForm(request.form)
-    print(request.method, request.form)
+    app.logger.debug("Request Method and form: {}, {}".format(request.method, request.form))
     if request.method == "POST":
         #This checks if the user is in the db and returns the user obj.
         #Need to write logic to redirect to a page to resend a link if link is lost or expired.
         user = form.validate_on_submit()
+        app.logger.warning("Form errors: {}".format(form.errors))
         if user:
             print('Form validated, user obtained: {}'.format(user.email))
-            app.logger.info('Form validated, user logged in: {}'.format(user.email))
+            app.logger.info('Form validated, logging in user: {}'.format(user.email))
             return create_JWT_n_redirect(user)
             # access_token = create_access_token(identity=user.email, fresh=True)
             # refresh_token = create_refresh_token(identity=user.email)

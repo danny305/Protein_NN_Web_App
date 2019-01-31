@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 #RUN apt-get update && apt-get install -y python python-pip && pip install --upgrade pip && pip install -r requirements.txt
 RUN apt-get update && apt-get install -y python python-pip gunicorn
 
-ADD ./web_app /web_app
+ADD . /web_app
 WORKDIR web_app/
 
 RUN pip install -r requirements.txt

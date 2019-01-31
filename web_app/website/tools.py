@@ -25,8 +25,8 @@ def create_JWT_n_redirect(user, redirect_page='homepage'):
     response = make_response(redirect(url_for(redirect_page)))
     set_access_cookies(response, access_token)
     set_refresh_cookies(response, refresh_token)
+    app.logger.info('Create access and refresh token, redirecting to {}'.format(redirect_page))
     # response.headers['Authorization'] = 'Bearer {}'.format(access_token)
-    print(response)
     return response
 
 
@@ -56,7 +56,16 @@ def handle_expired_token():
 @jwt.invalid_token_loader
 def missing_JWT_token(msg):
     print('from missing_JWT_token func:', msg)
-    response = make_response(redirect(url_for('login_page')))
+    app.logger.warning('End user attempted to access a page that requires valid JWT. '
+                       '{}'.format(msg))
+    message_header = "Login Required"
+    message_body = "This page is only accessible to logged in users."
+    response = make_response(render_template('intermediate_page.html',
+                                             message_header=message_header,
+                                             message_body=message_body,
+                                             login=True,
+                                             register=True,
+                                             ))
     unset_jwt_cookies(response)
     return response
     # return "The site being accessed requires a valid JWT to view." \

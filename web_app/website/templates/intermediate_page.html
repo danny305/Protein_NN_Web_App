@@ -1,0 +1,42 @@
+{% extends "source.html" %}
+
+
+{% block nav %}
+    {{super()}}
+{% endblock nav %}
+
+
+{% block main %}
+
+    <div class="container">
+        <div class="page-header">
+            <h3>{{ message_header }}</h3>
+        </div>
+        <div class="container">
+            <div class="move-right">
+                {% if message_body %}
+                    <p>{{ message_body }}</p><br>
+                {% endif %}
+                {% if message_body_2 %}
+                    <p>{{ message_body_2 }}</p><br>
+                {% endif %}
+                {% if message_body_3 %}
+                    <p>{{ message_body_3 }}</p><br>
+                {% endif %}
+                {% if login %}
+                    <p><a href="{{ url_for('login_page') }}">Login</a></p><br>
+                {% endif %}
+                {% if register %}
+                    <p><a href="{{ url_for('register_page') }}">Sign up</a></p><br>
+                {% endif %}
+                <p>Return to <a href="{{ url_for('homepage') }}">homepage.</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block footer %}
+    <div class="site-footer navbar-fixed-bottom">
+        {{ super() }}
+    </div>
+{% endblock footer %}

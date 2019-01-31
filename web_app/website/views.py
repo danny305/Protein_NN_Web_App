@@ -12,9 +12,8 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
 from sqlalchemy.exc import IntegrityError
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired, BadTimeSignature
 from datetime import datetime
-
 from forms import RegisterForm, LoginForm, NNForm
-from models import Users
+from models import Users, NN_Query
 from tools import *
 
 from . import app,db,jwt
@@ -30,6 +29,7 @@ from . import app,db,jwt
 def homepage():
     app.logger.info('Active Page: Homepage.')
     current_user = get_jwt_identity() or None
+    # Trouble shooting code
     # if current_user == None:
     #     raise Exception('Anonymous User!!')
     # else:
@@ -52,7 +52,13 @@ def FAQ_page():
 
 
 
-
+@app.route('/intermediate_page/')
+def intermediate_page(header,body):
+    message_header = 'The passed user is {}'.format(user)
+    message_body = 'This is the message body.'
+    return render_template('intermediate_page.html',
+                           message_header=message_header,
+                           message_body=message_body)
 
 
 
@@ -62,7 +68,8 @@ def register_page():
     #ToDo this logic needs to be checked for correct user registration and validation.
     form = RegisterForm(request.form)
     app.logger.debug(request.form)
-    app.logger.info( "Register page submission and validation: {}, {}".format(request.method, form.validate_on_submit()))
+    app.logger.info( "Register page submission and validation: {}, {}" \
+                     .format(request.method, form.validate_on_submit()))
     app.logger.warning("Form errors: {}".format(form.errors))
     if request.method == "POST" and form.validate_on_submit():
         try:
@@ -72,17 +79,36 @@ def register_page():
             email_sent =user.send_confirmation_email()
             if email_sent:
                 app.logger.info('Sent confirmation email to: {}'.format(user.email))
-                return redirect(url_for("homepage"))
+                message_header =  "An email confirmation link has been sent to {}. ".format(user.email)
+                message_body = "Please allow up to 5 minutes and check your spam folder."
+                message_body_2 = "If you have still not received your confirmation email, " \
+                                 "please attempt to log in order to trigger an additional " \
+                                 "confirmation email to be sent."
+                return render_template("intermediate_page.html",
+                                            message_header=message_header,
+                                            message_body=message_body,
+                                            message_body_2=message_body_2,
+                                            login=True,
+                                       )
+
             else:
                 app.logger.error('Registration failed for: {}. Unable to send email.'.format(user.email))
                 return "Registration Failed. Try Again"
 
         except IntegrityError:
-            print('Integrity Error')
             db.session.rollback()
+            app.logger.error('Email: {} already exists in the user db.'.format(request.form['email']))
             flash("ERROR! Email: {} already exists.".format(form.email),category='error')
-            app.logger.error('Email: {} already exists in the user db.'.format(form.email))
-            return "Integrity Error. User already exists."
+            message_header = "User: {} already exists.".format(user.email)
+            message_body = "It appears that this email address is already linked to an account. If you need an " \
+                           "additional confirmation email sent, you can trigger a new confirmation email by " \
+                           "attempting to login."
+
+            return render_template("intermediate_page.html",
+                                   message_header=message_header,
+                                   message_body=message_body,
+                                   login=True,
+                                   )
 
     # elif request.method == "POST":
     #     return "Registration Failed"
@@ -162,15 +188,17 @@ def NN_page():
     #print(jwt_claims)
     #print('cookie keys:', request.cookies.get('refresh_token_cookie'))
     current_user = get_jwt_identity() or None
-    print('User:',current_user)
     app.logger.info('Active Page: NN, current user: {}'.format(current_user))
     form = NNForm(request.form)
-    print(request.data)
-    print(request.form.viewkeys(), form.validate_on_submit())
-    if request.method == "POST" and form.validate_on_submit():
-
-        return "Submission successful" #redirect(url_for("success_NN_submission"))
-
+    app.logger.info("Request data: {}".format(form.data))
+    app.logger.info('Form method: {}, form validate on submit: {}'.format(request.method, form.validate_on_submit()))
+    if request.method == "POST":
+        if form.validate_on_submit():
+            query_obj = NN_Query(user_email=current_user,query=form.query)
+            query_obj.save_to_db()
+            return redirect(url_for('success_NN_submission'))
+            #return "Submission successful" #redirect(url_for("success_NN_submission"))
+        # return redirect(url_for('failed_NN_submission'))
     return render_template('NN_page.html', active_page='NN',form=form, current_user=current_user)
 
 
@@ -315,7 +343,7 @@ def success_NN_submission():
 
 
 
-app.route('/submission-failed')
+@app.route('/submission-failed')
 def failed_NN_submission():
     return "The submitted structure was not accepted by the neural network. " \
            "This is most likely due to a syntax or formatting error. Please " \

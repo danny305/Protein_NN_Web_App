@@ -103,11 +103,6 @@ class LoginForm(FlaskForm):
 
 class NNForm(FlaskForm):
     #Todo The validator for email must be pulled from a sql database/JWT from the user.
-    email = EmailField("Email Address", validators=[
-                                        DataRequired("Please provide your email address."),
-                                        Email('Make sure you typed in your email correctly.'),
-                                        length(min=8, max=50),
-                                        ])
 
     #ToDo need to figure out the validators to use for the protein submission.
     pdb_struct = StringField('PDB Structure', validators=[
@@ -120,11 +115,21 @@ class NNForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+    def validate(self):
+        if self.pdb_struct.data and self.cryst_struct_file.data:
+            self.cryst_struct_file.errors ="Form only accepts a PDB structure or a " \
+                                          "crystal structure file but not both.",
+            return False
+        elif self.pdb_struct.data:
+                if len(self.pdb_struct.data) == 4:
+                    self.query = self.pdb_struct.data.upper()
+                    return True
+                else:
+                    self.pdb_struct.errors = 'Invalid PDB ID: longer or shorter than 4 characters.',
+                    return False
+        elif self.cryst_struct_file.data:
+            self.query = self.cryst_struct_file
+            return True
+        else:
+            return False
 
-    # def validate(self):
-    #     user = self.headers
-    #     print(user)
-    #     #print([item for item in user['Cookie'].split(';') if item.startswith('session')])
-    #     #ToDo this is where the logic goes to pull the PDB structure from pdb.org
-    #     #ToDo This is where the logic goes to submit a crystal structure file to the NN.
-    #     pass

@@ -131,23 +131,27 @@ class NN_Query(db.Model):
     id= db.Column(db.Integer,primary_key=True)
     #ToDo I need to assign the time stamp in the init not as class variable.
     pdb_query = db.Column(db.String(length=8),nullable=True)
-    protein_file = db.Column(db.String(), nullable=True)
+    protein_file = db.Column(db.Text(4294000000), nullable=True)
     query_time = db.Column(db.DateTime, index=True, nullable=False)
     user_email = db.Column(db.Integer, db.ForeignKey('Users.email'))
 
     __table_args__ = CheckConstraint('NOT(pdb_query IS NULL AND protein_file IS NULL)'),
 
 
-    def __init__(self,query,user_email):
-        if len(query) < 8:
-            self.pdb_query = query
-        else:
-            self.protein_file = query
-
+    def __init__(self,user_email,query=None):
+        self.pdb_query = query
         self.user_email = user_email
         self.query_time = datetime.now()
 
 
     def __repr__(self):
         return "<NN_Query {}>".format(self.pdb_query)
+
+
+
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+        app.logger.info('Successfully saved to DB.')
 

@@ -5,7 +5,7 @@ from base64 import b64encode
 secret_key = os.urandom(24)
 mail_secret_key = os.urandom(24)
 mail_salt = os.urandom(24)
-jwt_secret_key = b64encode('I_love_my_smokes!')
+jwt_secret_key = b64encode(b'I_love_my_smokes!')
 
 class BaseConfig(object):
 

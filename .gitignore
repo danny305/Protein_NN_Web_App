@@ -2,3 +2,4 @@
 /*/*/*.pyc
 /*/*.pyc
 NN_container/NN_files/*
+nginx_container/nginx_config/*

@@ -8,7 +8,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from mailjet_rest import Client
 
-from config import DevelopmentConfig, ProductionConfig
+from .config import DevelopmentConfig, ProductionConfig
 from os import environ,getcwd
 
 import logging
@@ -26,6 +26,7 @@ app.config.from_object(config_object)
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
+    #logging.basicConfig()     #Uncomment this line to successfully perform a db migration.
     app.logger.setLevel(gunicorn_logger.level)
 
 db = SQLAlchemy(app)

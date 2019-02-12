@@ -1294,9 +1294,12 @@ dl dd {
   margin: 0 0 30px; }
 
 /*
- * Footer Styles
+ * Footer Styles #Need to figure out how to make it stick to bottom of every page regardless of page length.
  */
 .site-footer {
+  position: absolute;
+  bottom: 0;
+  background-color: #f5f5f5;
   text-align: center;
   padding: 50px 0; }
 

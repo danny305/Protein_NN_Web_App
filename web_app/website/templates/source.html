@@ -61,7 +61,7 @@
 							<span class="icon-bar"></span>
 						</button>
 					  	<a class="navbar-brand" href="{{ url_for('homepage') }}">
-						  <img src="../images/AIPS_logo_feb10.png" width="50" height="50">
+							<!-- <img src="../images/AIPS_logo_feb10.png" width="50" height="50">-->
 						</a>
 					</div>
 
@@ -90,7 +90,7 @@
 							{% for href,glyph,caption in right_navigation_bar %}
 								<li {% if active_page == caption|e %} class="active" {% endif %}>
 									<a href="{{ url_for(href|e) }}">
-								<span class="glyphicon glyphicon-{{glyph}}"></span>{{ caption|e }}</a></li>
+								<span class="glyphicon glyphicon-{{glyph}}"></span> {{ caption|e }}</a></li>
 							{% endfor %}
 						</ul>
 					</div>

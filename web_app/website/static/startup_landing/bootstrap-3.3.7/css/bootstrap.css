@@ -4482,7 +4482,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     margin-left: 15px;
   }
 }
-/*This is the one to move the login and sign up button from the right to the left.*/
+/*This is the one to move the login and sign up button from the right to the left.
 @media (min-width: 590px) {
   .navbar-left {
     float: left !important;
@@ -4494,7 +4494,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-right ~ .navbar-right {
     margin-right: 0;
   }
-}
+}*/
 .navbar-default {
   background-color: #f8f8f8;
   border-color: #e7e7e7;

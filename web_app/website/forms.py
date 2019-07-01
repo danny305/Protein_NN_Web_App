@@ -29,8 +29,8 @@ class RegisterForm(FlaskForm):
                                         DataRequired("Please provide an email address."),
                                                     Email('Please provide a valid email address.'),
                                                     length(min=8, max=128),
-                                                    # Regexp('.+@.+\.edu$', message="Currently only academic email "
-                                                    #                               "addresses are accepted. (.edu)"),
+                                                    Regexp('.+@.+\.edu$', message="Currently only academic email "
+                                                                                  "addresses are accepted. (.edu)"),
                                                     ])
 
     retype_email = EmailField('Confirm Email Address', validators=[

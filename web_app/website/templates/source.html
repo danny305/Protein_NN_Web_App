@@ -21,7 +21,7 @@
 			<meta http-equiv="X-UA-Compatible" content="IE=edge">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
 
-			<title>Rajhav's Neural Net Homepage</title>
+			<title>AI Protein Solutions</title>
 			<!-- Loading third party fonts -->
 			{% block styles %}
 				<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
@@ -50,35 +50,50 @@
 		{% block nav %}
 			<!--<nav class="navbar navbar-default"></nav> -->
 			<nav class="navbar navbar-fixed-top navbar-inverse">
-				<div class="navbar-header">
-				  <a class="navbar-brand" href="{{ url_for('homepage') }}">Raghav's Neural Net</a>
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button class="navbar-toggle navbar-right" type="button" data-toggle="collapse"
+								data-target="#NavBar">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					  	<a class="navbar-brand" href="{{ url_for('homepage') }}">
+						  <img src="../images/AIPS_logo_feb10.png" width="50" height="50">
+						</a>
+					</div>
+
+
+					<div class="collapse navbar-collapse" id="NavBar">
+						<ul class="nav navbar-nav">
+							{% for href,caption in left_navigation_bar %}
+								<li{% if active_page == caption|e %} class="active"{% endif %}>
+									<a href="{{ url_for(href|e) }}">{{ caption|e }}</a>
+								</li>
+							{% endfor %}
+							{% if active_page == 'Home' %}
+							<li class="#"><a href="#about">About</a></li>
+							{% else %}
+							<li class="#"><a href="{{ url_for('homepage') }}#about">About</a></li>
+							{% endif %}
+						</ul>
+					{#
+						<!--
+						<li class="active"><a href="{{ url_for('homepage') }}">Home</a></li>
+						<li><a href="{{ url_for ('NN_page') }}">NN</a></li>
+						<li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
+						-->
+					#}
+						<ul class="nav navbar-nav navbar-right">
+							{% for href,glyph,caption in right_navigation_bar %}
+								<li {% if active_page == caption|e %} class="active" {% endif %}>
+									<a href="{{ url_for(href|e) }}">
+								<span class="glyphicon glyphicon-{{glyph}}"></span>{{ caption|e }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
 				</div>
-
-				<ul class="nav navbar-nav">
-					{% for href,caption in left_navigation_bar %}
-						<li{% if active_page == caption|e %} class="active"{% endif %}><a href="{{ url_for(href|e) }}">{{ caption|e }}</a></li>
-					{% endfor %}
-					{% if active_page == 'Home' %}
-					<li><a href="#about">About</a></li>
-					{% else %}
-					<li><a href="{{ url_for('homepage') }}#about">About</a></li>
-					{% endif %}
-				</ul>
-				{#
-					<!--
-					<li class="active"><a href="{{ url_for('homepage') }}">Home</a></li>
-					<li><a href="{{ url_for ('NN_page') }}">NN</a></li>
-					<li><a href="{{ url_for ('FAQ_page') }}">FAQ</a></li>
-					-->
-				#}
-
-				<ul class="nav navbar-nav navbar-right">
-					{% for href,glyph,caption in right_navigation_bar %}
-						<li{% if active_page == caption|e %} class="active"{% endif %}><a href="{{ url_for(href|e) }}">
-						<span class="glyphicon glyphicon-{{glyph}}"></span> {{ caption|e }}</a></li>
-					{% endfor %}
-				</ul>
-
+			</nav>
 				{#
 				<!--
 				{% if current_user %}
@@ -95,7 +110,6 @@
 				{% endif %}
 				-->
 				#}
-			</nav>
 		{% endblock nav %}
 
 		{% block main %}
@@ -105,8 +119,13 @@
 			<div class=""></div>
 			<footer class="site-footer">
 				<div class="container">
+					<p>
+						Copyright 2019 by AI Protein Solutions, LLC. All rights reserved.
+					</p>
+					<!--
 					<p>Copyright 2019 by the Ellington Lab at the University of Texas at Austin,
 						Designed by Danny D. All rights reserved</p>
+					-->
 
 					<div class="social-links">
 						<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>

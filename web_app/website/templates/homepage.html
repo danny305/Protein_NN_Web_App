@@ -2,12 +2,14 @@
 
 
 {% block main %}
-			<header class="hero fullwidth-block" data-bg-image="../startup_landing/images/Neural_Net_Background.jpg">
+			<header class="hero fullwidth-block" data-bg-image="../images/Neural_Net_Background.jpg">
 
 				{% block center_content %}
 				<div class="hero-content">
-					<h1>Ellington Research Lab Presents... <br>
-						<strong>Raghav's Neural Net</strong></h1>
+					<h1><img src="../images/AIPS_logo_feb10.png" width="50" height="50"> Protein Solutions, LLC <br><br>
+						Engineering Proteins with<br>
+						<strong>Artificial Intellgence</strong></h1>
+
 					{% if not current_user %}
 					<a class="btn btn-warning" href="{{ url_for('register_page') }}">
 					<strong style="color: black">Register</strong></a>
@@ -15,6 +17,8 @@
 					<a class="btn btn-warning" href="{{ url_for('NN_page') }}">
 					<strong style="color: black">Submit NN Query</strong></a>
 					{% endif %}
+
+
 
 					<!--<div class="alert alert-dismissable">{{current_user}}</div>-->
 				</div>
@@ -29,26 +33,36 @@
 
 
 
-				<div id="about" class="fullwidth-block" data-bg-color="#e6e6e6">
-					<h2 class="section-title">Modify Proteins with Machine Learning</h2>
-						<small class="section-subtitle">A Neural Network Trained on Protein Crystal Structures</small>
-
+				<div id="about" class="fullwidth-block" data-bg-color="#e6e6e6" style="height: auto;">
+					<h2 class="section-title">Utilizing Deep Learning to Detect Unstable Amino Acid Residues</h2>
+						<!--<small class="section-subtitle"></small>-->
 					<div class="container">
-						<div class="row">
-							<div class="col-md-4">
+						<div class="row" style="text-align:justify">
+							<div class="col-md-4" >
 								<dl>
-									<dt>How was it trained?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-									<!--
-									<dt>Excepteur sint occaecat cupidatat?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
-									-->
-								</dl>
-							</div>
-							<div class="col-md-4">
-								<dl>
-									<dt>What does it predict?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<dt>Advantages of Deep Learning</dt>
+									<dd>
+										<p>
+											The numerous methods to engineer proteins are limited by how tightly function
+											can be associated to sequence and how frugally that sequence space can be sampled.
+											Structural data and computational approaches can narrow the search space, and
+											concomitantly reduce the amount of downstream characterization. These tools
+											become increasingly important for proteins where the desired properties are
+											difficult to measure at scale.
+										</p>
+										<p>
+											Machine learning is attractive as it doesn’t require any foreknowledge about
+											particular protein features, or time consuming manual inspection of individual
+											structural features. Given the evolved proteome is a compromise between folding,
+											stability and function, we hypothesize that structural outliers, at locations
+											away from the active site might be affecting the former properties, but not
+											function. Building upon this framework, we have established a new protein
+											engineering paradigm by leveraging artificial intelligence to learn the consensus
+											microenvironments for individual amino acids and scan entire structures to identify
+											residues with very low wild-type probabilities that deviate from the structural
+											consensus.
+										</p>
+									</dd>
 									<!--
 									<dt>Excepteur sint occaecat cupidatat?</dt>
 									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
@@ -57,8 +71,58 @@
 							</div>
 							<div class="col-md-4">
 								<dl>
-									<dt>How to use the Neural Net?</dt>
-									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
+									<dt>Detecting Unstable Residues with Convolutional Neural Networks</dt>
+									<dd>
+										<p>
+											Compared to parental proteins, stabilized variants often exhibit desirable
+											properties like increased expression yield, thermal tolerance, and shelf-life.
+											Our technology enables researchers to quickly identify residues within a protein
+											that is not well suited for its local environment. We are able to identify these
+											residues by learning the canonical microenvironment for each amino acid via a
+											Convolutional Neural Network. Thus, enabling scientist to quickly identify when
+											a particular residue is in a noncanonical microenvironment.
+										</p>
+										<p>
+											So far, our deep learning model has engineered in vivo stability across three
+											diverse proteins, each representing a distinct protein engineering challenge.
+										</p>
+										<p>
+											<strong>Blue Fluorescent Protein (BFP)</strong>
+											<br>
+
+										</p>
+										<p>
+											<strong>TEM-1 &beta;-Lactamase</strong>
+											<br>
+
+										</p>
+										<p>
+											<strong>Mannose Phosphate Isomerase</strong>
+											<br>
+
+										</p>
+									</dd>
+
+								</dl>
+							</div>
+
+							<div class="col-md-4">
+								<dl>
+									<dt>How to Obtain Amino Acid Predictions?</dt>
+									<dd>
+										<p>
+											We have made it easy for academic institution to utilize our technology.
+											To register for an account, please use an email address with a .edu top-level
+											domain.
+											Otherwise, please email us at
+											<a href="mailto:aips@aiproteinsolutions.net">aips@aiproteinsolutions.net.</a>
+										</p>
+										<p>
+											Users may provide a PDB code or upload a PDB file. We will email the user a
+											prediction file within 30 minutes of submission.
+										</p>
+
+									</dd>
 				        			<!--
 									<dt>Excepteur sint occaecat cupidatat?</dt>
 									<dd>Natus error voluptatem doloremque laudantium totam rem aperiam, eaque ipsa quae inventore veritatis et quasi architecto beatae vitae dicta explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit consequuntur.</dd>
